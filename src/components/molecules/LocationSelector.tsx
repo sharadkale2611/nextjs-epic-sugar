@@ -1,47 +1,93 @@
 "use client";
 
-import { useState } from "react";
 import {
     useGetStatesQuery,
     useGetCitiesQuery,
 } from "@/features/location/locationApi";
+import { skipToken } from "@reduxjs/toolkit/query";
+import CustomSelect from "@/components/atoms/CustomSelect";
 
-export default function LocationSelector() {
-    const [stateId, setStateId] = useState<number | null>(null);
+/* -------------------------------- TYPES -------------------------------- */
 
-    const { data: states, isLoading } = useGetStatesQuery();
-    const { data: cities, isLoading: cityLoading } =
-        useGetCitiesQuery(stateId!, {
-            skip: !stateId,
-        });
+type GridSpan = {
+    base?: 12 | 6 | 4 | 3;
+    md?: 12 | 6 | 4 | 3;
+    lg?: 12 | 6 | 4 | 3;
+};
+
+interface LocationSelectorProps {
+    stateId: number | null;
+    cityId: number | null;
+    onStateChange: (value: number) => void;
+    onCityChange: (value: number) => void;
+    stateCol?: GridSpan;
+    cityCol?: GridSpan;
+}
+
+/* -------------------------- GRID CLASS BUILDER -------------------------- */
+
+const buildGridClass = (span?: GridSpan) => {
+    if (!span) return "col-span-12";
+
+    return [
+        span.base && `col-span-${span.base}`,
+        span.md && `md:col-span-${span.md}`,
+        span.lg && `lg:col-span-${span.lg}`,
+    ]
+        .filter(Boolean)
+        .join(" ");
+};
+
+/* -------------------------- COMPONENT -------------------------- */
+
+export default function LocationSelector({
+    stateId,
+    cityId,
+    onStateChange,
+    onCityChange,
+    stateCol = { base: 12 },
+    cityCol = { base: 12 },
+}: LocationSelectorProps) {
+    const { data: states } = useGetStatesQuery();
+
+    const { data: cities } = useGetCitiesQuery(
+        stateId ?? skipToken
+    );
 
     return (
-        <div className="space-y-4">
+        <div className="grid grid-cols-12 gap-4">
             {/* STATE */}
-            <select
-                className="border p-2 rounded w-full"
-                onChange={(e) => setStateId(Number(e.target.value))}
-            >
-                <option value="">Select State</option>
-                {states?.map((state) => (
-                    <option key={state.stateId} value={state.stateId}>
-                        {state.stateName}
-                    </option>
-                ))}
-            </select>
+            <div className={buildGridClass(stateCol)}>
+                <CustomSelect
+                    label="State"
+                    name="state"
+                    value={stateId ?? ""}
+                    onChange={(e) => onStateChange(Number(e.target.value))}
+                    options={
+                        states?.map((s: any) => ({
+                            id: s.stateId,
+                            name: s.stateName,
+                        })) || []
+                    }
+                />
+            </div>
 
             {/* CITY */}
-            <select
-                className="border p-2 rounded w-full"
-                disabled={!stateId}
-            >
-                <option value="">Select City</option>
-                {cities?.map((city) => (
-                    <option key={city.cityId} value={city.cityId}>
-                        {city.cityName}
-                    </option>
-                ))}
-            </select>
+            <div className={buildGridClass(cityCol)}>
+                <CustomSelect
+                    label="City"
+                    name="city"
+                    value={cityId ?? ""}
+                    disabled={!stateId}
+                    onChange={(e) => onCityChange(Number(e.target.value))}
+                    options={
+                        cities?.map((c: any) => ({
+                            id: c.cityId,
+                            name: c.cityName,
+                        })) || []
+                    }
+                />
+            </div>
         </div>
     );
 }

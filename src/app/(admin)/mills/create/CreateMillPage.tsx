@@ -2,6 +2,7 @@
 
 import CustomInput from "@/components/atoms/CustomInput";
 import CustomSelect from "@/components/atoms/CustomSelect";
+import LocationSelector from "@/components/molecules/LocationSelector";
 import React, { useState } from "react";
 
 interface StateOption {
@@ -19,8 +20,8 @@ export default function CreateMillPage() {
         millName: "",
         millCode: "",
         address: "",
-        stateId: "",
-        cityId: "",
+        stateId: null as number | null,
+        cityId: null as number | null,
         country: "",
         pincode: "",
         contactPerson: "",
@@ -28,31 +29,29 @@ export default function CreateMillPage() {
         email: "",
         gstNumber: "",
     });
-
-    // TEMP MOCK DATA (replace with API later)
-    const states: StateOption[] = [
-        { id: 1, name: "Maharashtra" },
-        { id: 2, name: "Gujarat" },
-    ];
-
-    const cities: CityOption[] =
-        form.stateId === "1"
-            ? [
-                { id: 1, name: "Pune" },
-                { id: 2, name: "Mumbai" },
-            ]
-            : form.stateId === "2"
-                ? [
-                    { id: 3, name: "Ahmedabad" },
-                    { id: 4, name: "Surat" },
-                ]
-                : [];
+   
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
+
+    const handleStateChange = (stateId: number) => {
+        setForm((prev) => ({
+            ...prev,
+            stateId,
+            cityId: null, // reset city when state changes
+        }));
+    };
+
+    const handleCityChange = (cityId: number) => {
+        setForm((prev) => ({
+            ...prev,
+            cityId,
+        }));
+    };
+
 
     const handleSave = () => {
         console.log("Mill Data:", form);
@@ -91,23 +90,21 @@ export default function CreateMillPage() {
                             Location Details
                         </h3>
 
-                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <CustomSelect
-                                label="State"
-                                name="stateId"
-                                value={form.stateId}
-                                onChange={handleChange}
-                                options={states}
-                            />
+                        <LocationSelector
+                            stateId={form.stateId}
+                            cityId={form.cityId}
+                            onStateChange={(val) =>
+                                setForm((prev) => ({ ...prev, stateId: val, cityId: null }))
+                            }
+                            onCityChange={(val) =>
+                                setForm((prev) => ({ ...prev, cityId: val }))
+                            }
+                            stateCol={{ base: 12, md: 6 }}
+                            cityCol={{ base: 12, md: 6 }}
+                        />
 
-                            <CustomSelect
-                                label="City"
-                                name="cityId"
-                                value={form.cityId}
-                                onChange={handleChange}
-                                options={cities}
-                            />
 
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
                             <CustomInput label="Pin Code" name="pincode" value={form.pincode} onChange={handleChange} />
                             <CustomInput label="Country" name="country" value={form.country} onChange={handleChange} />
                         </div>
