@@ -6,6 +6,5 @@ export const API_ROUTES = {
         LOGOUT: "/auth/logout",
     },
 
-
     // Add Authebntication routes here in the future
 };
