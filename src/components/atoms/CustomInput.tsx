@@ -8,6 +8,7 @@ interface CustomInputProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
     error?: string;
+    readOnly?: boolean; // Added optional readOnly prop
 }
 
 export default function CustomInput({
@@ -18,6 +19,7 @@ export default function CustomInput({
     type = "text",
     placeholder,
     error,
+    readOnly,
 }: CustomInputProps) {
     return (
         <div className="space-y-1">
@@ -31,6 +33,7 @@ export default function CustomInput({
                 value={value}
                 placeholder={placeholder}
                 onChange={onChange}
+                readOnly={readOnly} // Added readOnly attribute
                 className={`w-full rounded-lg border px-3 py-2 focus:ring-2 outline-none
           ${error ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}
         `}

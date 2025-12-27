@@ -17,7 +17,7 @@ const MillTable = ({ data }: Props) => {
             <table className="min-w-full text-sm text-left text-gray-600">
                 <thead className="bg-gray-100 text-xs uppercase text-gray-700">
                     <tr>
-                        <th className="px-6 py-3">ID</th>
+                        <th className="px-6 py-3">Sr. No.</th>
                         <th className="px-6 py-3">Mill Name</th>
                         <th className="px-6 py-3">Location</th>
                         <th className="px-6 py-3">Contact Person</th>
@@ -33,7 +33,7 @@ const MillTable = ({ data }: Props) => {
                                 }`}
                         >
                             <td className="px-6 py-4 font-medium text-gray-800">
-                                {item.id}
+                                {index + 1}
                             </td>
                             <td className="px-6 py-4 text-link"><Link href={`/mills/${item.id}`}>{item.millName}</Link></td>
                             <td className="px-6 py-4">{item.location}</td>
@@ -50,14 +50,14 @@ const MillTable = ({ data }: Props) => {
                                     </Button>
 
                                 </Link>
-                                <Button
+                                {/* <Button
                                     size="xs"
                                     variant="danger"
                                     outline
                                     startIcon={<Icon name="TrashBinIcon"  className="w-5 h-5" />}
                                 >
                                     Delete
-                                </Button>
+                                </Button> */}
 
 
                             </td>

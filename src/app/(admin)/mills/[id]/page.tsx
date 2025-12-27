@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import { useGetMillByIdQuery, useUpdateMillStatusMutation } from "@/features/mill/millApi";
 import { enqueueSnackbar } from "notistack";
 import Button from "@/components/atoms/Button";
+import MillProfileView from "./MillProfileView";
 
 export default function MillDetailsPage() {
   const params = useParams();
@@ -32,7 +33,9 @@ export default function MillDetailsPage() {
   };
 
   return (
+    
     <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <MillProfileView />
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">{data.millName}</h1>
 

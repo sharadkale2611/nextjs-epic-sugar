@@ -27,6 +27,7 @@ export const millApi = api.injectEndpoints({
         getMillById: builder.query<Mill, number>({
             query: (id) => `${API_ROUTES.MILLS}/${id}`,
             transformResponse: (res: ApiResponse<Mill>) => res.data,
+            providesTags: (result, error, id) => [{ type: "Mill", id }], // Add cache tags for invalidation
         }),
 
         createMill: builder.mutation<Mill, Partial<Mill>>({
@@ -50,7 +51,16 @@ export const millApi = api.injectEndpoints({
             invalidatesTags: (result) =>
                 result ? [{ type: "Mill", id: result.millId }] : ["Mill"],
         }),
-
+        updateMill: builder.mutation<Mill, Partial<Mill>>({
+            query: (payload) => ({
+                url: `${API_ROUTES.MILLS}/${payload.millId}`,
+                method: "PUT",
+                body: payload,
+            }),
+            transformResponse: (res: ApiResponse<Mill>) => res.data,
+            invalidatesTags: (result) =>
+                result ? [{ type: "Mill", id: result.millId }] : ["Mill"], // Invalidate cache for the updated mill
+        }),
     }),
 });
 
@@ -60,4 +70,5 @@ export const {
     useGetMillByIdQuery,
     useCreateMillMutation,
     useUpdateMillStatusMutation,
+    useUpdateMillMutation,
 } = millApi;

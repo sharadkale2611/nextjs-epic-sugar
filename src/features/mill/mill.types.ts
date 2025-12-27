@@ -1,4 +1,4 @@
-// src > features > mill > mill.types.ts
+// src/features/mill/mill.types.ts
 
 export interface CreateMillPayload {
     millName: string;
@@ -11,24 +11,32 @@ export interface CreateMillPayload {
     email: string;
     gstNumber: string;
     pincode: string;
+    country: string;
 }
-
 
 export interface Mill {
     millId: number;
     millName: string;
     millCode: string;
     address: string;
+
     cityId: number;
-    cityName: number;
-    stateName: number;
+    cityName: string;
+
+    stateId: number;
+    stateName: string;
+
     country: string;
     isActive: boolean;
+
     contactPerson: string;
     contactNumber: string;
     email: string;
     gstNumber: string;
     pincode: string;
+
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -38,11 +46,11 @@ export interface PaginatedResponse<T> {
     totalPages: number;
     data: T[];
 }
-    
+
 export interface ApiResponse<T> {
     success: boolean;
     message: string;
     data: T;
-    error: any;
-    errors: any;
+    error?: string | null;
+    errors?: any;
 }
