@@ -24,15 +24,38 @@ interface LocationSelectorProps {
     cityCol?: GridSpan;
 }
 
-/* -------------------------- GRID CLASS BUILDER -------------------------- */
+/* ------------------ STATIC GRID MAP (TAILWIND SAFE) ------------------ */
+
+const gridMap = {
+    base: {
+        12: "col-span-12",
+        6: "col-span-6",
+        4: "col-span-4",
+        3: "col-span-3",
+    },
+    md: {
+        12: "md:col-span-12",
+        6: "md:col-span-6",
+        4: "md:col-span-4",
+        3: "md:col-span-3",
+    },
+    lg: {
+        12: "lg:col-span-12",
+        6: "lg:col-span-6",
+        4: "lg:col-span-4",
+        3: "lg:col-span-3",
+    },
+};
+
+/* ------------------ GRID CLASS BUILDER ------------------ */
 
 const buildGridClass = (span?: GridSpan) => {
     if (!span) return "col-span-12";
 
     return [
-        span.base && `col-span-${span.base}`,
-        span.md && `md:col-span-${span.md}`,
-        span.lg && `lg:col-span-${span.lg}`,
+        span.base && gridMap.base[span.base],
+        span.md && gridMap.md[span.md],
+        span.lg && gridMap.lg[span.lg],
     ]
         .filter(Boolean)
         .join(" ");

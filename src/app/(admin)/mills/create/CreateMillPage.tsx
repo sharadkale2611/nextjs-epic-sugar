@@ -104,6 +104,7 @@ export default function CreateMillPage() {
                         />
 
 
+
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
                             <CustomInput label="Pin Code" name="pincode" value={form.pincode} onChange={handleChange} />
                             <CustomInput label="Country" name="country" value={form.country} onChange={handleChange} />
