@@ -5,4 +5,7 @@ export const API_ROUTES = {
         LOGIN: "/auth/login",
         LOGOUT: "/auth/logout",
     },
+
+
+    // Add Authebntication routes here in the future
 };
