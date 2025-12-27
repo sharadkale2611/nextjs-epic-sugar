@@ -1,4 +1,7 @@
-import { api } from "@/store/api/baseApi";
+// src/features/auth/authApi.ts
+
+import { api } from "@/store/api";
+
 
 export interface LoginRequest {
     username: string;

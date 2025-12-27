@@ -7,4 +7,6 @@ export const API_ROUTES = {
     },
 
     // Add Authebntication routes here in the future
+    MILLS: "/mills",
+
 };

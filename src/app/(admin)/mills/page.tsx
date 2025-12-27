@@ -8,28 +8,24 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import MillTable from "./table";
 import Button from "@/components/atoms/Button";
-
+import { useGetPaginatedMillsQuery } from "@/features/mill/millApi";
 
 export default function Mills() {
     const [currentPage, setCurrentPage] = useState(1);
-    const router = useRouter();
-
-
-    const millsData = Array.from({ length: 50 }, (_, i) => ({
-        id: i + 1,
-        millName: `Mill ${i + 1}`,
-        location: "Maharashtra",
-        contactPerson: `Person ${i + 1}`
-    }));
-
     const itemsPerPage = 5;
-    const totalPages = Math.ceil(millsData.length / itemsPerPage);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = millsData.slice(
-        startIndex,
-        startIndex + itemsPerPage
-    );
+    const { data, isLoading, isError } = useGetPaginatedMillsQuery({
+        pageNumber: currentPage,
+        pageSize: itemsPerPage,
+    });
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError) {
+        return <div>Error loading mills data.</div>;
+    }
 
     return (
         <>
@@ -38,7 +34,7 @@ export default function Mills() {
             <div className="space-y-6">
                 <ComponentCard
                     title="Mill List"
-                    desc="Total 30 record found."
+                    desc={`Total ${data?.totalRecords || 0} records found.`}
                     action={
                         <Link href="/mills/create">
                             <Button variant="primary" size="sm">
@@ -47,11 +43,11 @@ export default function Mills() {
                         </Link>
                     }
                 >
-                    <MillTable data={paginatedData} />
+                    <MillTable data={data?.items || []} />
 
                     <Pagination
                         currentPage={currentPage}
-                        totalPages={totalPages}
+                        totalPages={data?.totalPages || 1}
                         onPageChange={setCurrentPage}
                     />
                 </ComponentCard>
