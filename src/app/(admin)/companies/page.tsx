@@ -5,27 +5,33 @@ import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Pagination from "@/components/tables/Pagination";
 import Link from "next/link";
-import CompaniesTable from "./table";
 import Button from "@/components/atoms/Button";
+import CompaniesTable from "./table";
+import { useGetPaginatedCompaniesQuery } from "@/features/company/companyApi";
+import { Company } from "@/features/company/company.types";
 
 export default function Companies() {
     const [currentPage, setCurrentPage] = useState(1);
-
-    const companiesData = Array.from({ length: 50 }, (_, i) => ({
-        id: i + 1,
-        companyName: `company ${i + 1}`,
-        location: "Maharashtra",
-        contactDetails: `Person ${i + 1}`
-    }));
-
     const itemsPerPage = 5;
-    const totalPages = Math.ceil(companiesData.length / itemsPerPage);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = companiesData.slice(
-        startIndex,
-        startIndex + itemsPerPage
-    );
+    const { data, isLoading, isError } = useGetPaginatedCompaniesQuery({
+        pageNumber: currentPage,
+        pageSize: itemsPerPage,
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading companies.</div>;
+
+    const companies: Company[] = data?.data ?? [];
+    const totalPages = data?.totalPages ?? 1;
+    const totalCount = data?.totalCount ?? 0;
+
+    const tableData = companies.map((company) => ({
+        id: company.companyId,
+        companyName: company.companyName,
+        location: `${company.cityName}, ${company.stateName}`,
+        contactDetails: company.contactEmail || company.contactPhone || "-",
+    }));
 
     return (
         <>
@@ -34,9 +40,8 @@ export default function Companies() {
             <div className="space-y-6">
                 <ComponentCard
                     title="Companies List"
-                    desc="Manage all companies and contacts"
+                    desc={`Total ${totalCount} companies found`}
                     action={
-
                         <Link href="/companies/create">
                             <Button variant="primary" size="sm">
                                 + Add Company
@@ -44,7 +49,7 @@ export default function Companies() {
                         </Link>
                     }
                 >
-                    <CompaniesTable data={paginatedData} />
+                    <CompaniesTable data={tableData} />
 
                     <Pagination
                         currentPage={currentPage}

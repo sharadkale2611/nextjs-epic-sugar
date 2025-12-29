@@ -4,7 +4,6 @@ import { useState } from "react";
 import Icon from "@/components/atoms/Icon";
 import { useGetMillDetailsQuery, useUpdateMillStatusMutation } from "@/features/mill/millApi";
 import { useSnackbar } from "notistack";
-import { useParams } from "next/navigation";
 
 /* =======================
    SMALL REUSABLE COMPONENTS
@@ -212,11 +211,8 @@ const ProductsTab = ({ products }: any) => (
    MAIN PAGE
 ======================= */
 
-export default function MillProfileView() {
+export default function MillProfileView({ millId }: { millId: number }) {
     const [activeTab, setActiveTab] = useState("profile");
-
-    const params = useParams();
-    const millId = Number(params.id);
 
     const { enqueueSnackbar } = useSnackbar();
 

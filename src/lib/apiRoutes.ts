@@ -10,5 +10,8 @@ export const API_ROUTES = {
     MILLS: "/mills",
     MILL_DETAILS: (id: number) => `/mills/mill-details/${id}`,
 
+    COMPANIES: "/companies",
+    COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
+
 
 };
