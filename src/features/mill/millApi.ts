@@ -1,7 +1,5 @@
-// src > features > mill > millApi.ts
-
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { ApiResponse, Mill, PaginatedResponse } from "./mill.types";
+import { ApiResponse, Mill, PaginatedResponse, MillDetailsResponse } from "./mill.types";
 import { API_ROUTES } from "@/lib/apiRoutes";
 import { api } from "@/store/api";
 
@@ -27,7 +25,15 @@ export const millApi = api.injectEndpoints({
         getMillById: builder.query<Mill, number>({
             query: (id) => `${API_ROUTES.MILLS}/${id}`,
             transformResponse: (res: ApiResponse<Mill>) => res.data,
-            providesTags: (result, error, id) => [{ type: "Mill", id }], // Add cache tags for invalidation
+            providesTags: (result, error, id) => [{ type: "Mill", id }],
+        }),
+
+        getMillDetails: builder.query<MillDetailsResponse, number>({
+            query: (id) => API_ROUTES.MILL_DETAILS(id),
+            transformResponse: (res: ApiResponse<MillDetailsResponse>) => res.data,
+            providesTags: (result, error, id) => [
+                { type: "Mill", id },
+            ],
         }),
 
         createMill: builder.mutation<Mill, Partial<Mill>>({
@@ -36,9 +42,10 @@ export const millApi = api.injectEndpoints({
                 method: "POST",
                 body: payload,
             }),
-            transformResponse: (res: ApiResponse<Mill>) => res.data,            
+            transformResponse: (res: ApiResponse<Mill>) => res.data,
             invalidatesTags: ["Mill"],
         }),
+
         updateMillStatus: builder.mutation<
             Mill,
             { millId: number; isActive: boolean }
@@ -51,6 +58,7 @@ export const millApi = api.injectEndpoints({
             invalidatesTags: (result) =>
                 result ? [{ type: "Mill", id: result.millId }] : ["Mill"],
         }),
+
         updateMill: builder.mutation<Mill, Partial<Mill>>({
             query: (payload) => ({
                 url: `${API_ROUTES.MILLS}/${payload.millId}`,
@@ -59,7 +67,7 @@ export const millApi = api.injectEndpoints({
             }),
             transformResponse: (res: ApiResponse<Mill>) => res.data,
             invalidatesTags: (result) =>
-                result ? [{ type: "Mill", id: result.millId }] : ["Mill"], // Invalidate cache for the updated mill
+                result ? [{ type: "Mill", id: result.millId }] : ["Mill"],
         }),
     }),
 });
@@ -68,6 +76,7 @@ export const {
     useGetMillsQuery,
     useGetPaginatedMillsQuery,
     useGetMillByIdQuery,
+    useGetMillDetailsQuery,
     useCreateMillMutation,
     useUpdateMillStatusMutation,
     useUpdateMillMutation,
