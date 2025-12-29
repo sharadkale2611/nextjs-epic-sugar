@@ -4,6 +4,8 @@ import { useState } from "react";
 import Icon from "@/components/atoms/Icon";
 import { useGetMillDetailsQuery, useUpdateMillStatusMutation } from "@/features/mill/millApi";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
+import KYCDocsPage from "@/app/(admin)/kyc-documents/[userId]/page";
 
 /* =======================
    SMALL REUSABLE COMPONENTS
@@ -87,7 +89,9 @@ const MillUsersTable = ({ users }: any) => {
     );
 };
 
-const KYCDocumentsTable = ({ documents }: any) => {
+const KYCDocumentsTable = ({ documents , onVerifyClick }: any) => {
+    //  const router = useRouter();
+     const userId = documents?.[0]?.userId;
     return (
         <div className="bg-white rounded-2xl shadow p-6 mt-6">
             <div className="flex items-center justify-between mb-4">
@@ -96,10 +100,20 @@ const KYCDocumentsTable = ({ documents }: any) => {
                     <h2 className="text-xl font-semibold text-blue-600">KYC Documents</h2>
                 </div>
 
-                <button className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50">
-                    <Icon name="CheckCircleIcon" className="w-4 h-4" />
-                    Verify Documents
-                </button>
+                
+                {/* <button
+                onClick={() => router.push(`/kyc-documents/${userId}`)}
+                className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50"
+                >
+                Verify Documents
+                </button> */}
+
+                <button
+  onClick={() => onVerifyClick(userId)}
+  className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50"
+>
+  Verify Documents
+</button>
             </div>
 
             <div className="overflow-hidden rounded-xl border">
@@ -191,9 +205,41 @@ const UsersTab = ({ users }: any) => (
 
 );
 
-const KYCTab = ({ kycDocs }: any) => (
-    <KYCDocumentsTable documents={kycDocs} />
+// const KYCTab = ({ kycDocs }: any) => (
+//     <KYCDocumentsTable documents={kycDocs} />
+// );
+
+const KYCTab = ({
+  kycDocs,
+  onVerifyClick,
+  showKycVerification,
+  selectedUserId,
+  onBack
+}: any) => (
+  <>
+    {!showKycVerification && (
+      <KYCDocumentsTable documents={kycDocs} onVerifyClick={onVerifyClick} />
+    )}
+
+    {showKycVerification && selectedUserId && (
+      <div className="mt-6 animate-fadeIn">
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="text-xl font-semibold text-blue-600">Verify KYC</h2>
+
+          <button
+            onClick={onBack}
+            className="px-4 py-2 rounded-full border text-gray-600 hover:bg-gray-50"
+          >
+            ← Back to KYC List
+          </button>
+        </div>
+
+        <KYCDocsPage userId={selectedUserId} />
+      </div>
+    )}
+  </>
 );
+
 
 const ProductsTab = ({ products }: any) => (
     <Section title="Products" icon="BoxCubeIcon">
@@ -213,6 +259,10 @@ const ProductsTab = ({ products }: any) => (
 
 export default function MillProfileView({ millId }: { millId: number }) {
     const [activeTab, setActiveTab] = useState("profile");
+
+    
+    const [showKycVerification, setShowKycVerification] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -279,7 +329,24 @@ export default function MillProfileView({ millId }: { millId: number }) {
 
                 {activeTab === "profile" && <ProfileTab mill={mill} />}
                 {activeTab === "users" && <UsersTab users={users} />}
-                {activeTab === "kyc" && <KYCTab kycDocs={kycDocs} />}
+                {/* {activeTab === "kyc" && <KYCTab kycDocs={kycDocs} />} */}
+                {activeTab === "kyc" && (
+  <KYCTab
+    kycDocs={kycDocs}
+    showKycVerification={showKycVerification}
+    selectedUserId={selectedUserId}
+    onVerifyClick={(userId: number) => {
+      setSelectedUserId(userId);
+      setShowKycVerification(true);   // always open verification
+    }}
+    onBack={() => {
+      setShowKycVerification(false);  // go back to table
+      setSelectedUserId(null);
+    }}
+  />
+)}
+
+
                 {activeTab === "products" && <ProductsTab products={products} />}
             </div>
         </div>

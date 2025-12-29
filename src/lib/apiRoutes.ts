@@ -13,5 +13,8 @@ export const API_ROUTES = {
     COMPANIES: "/companies",
     COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
 
+    KYC: "/kyc-documents/verification",
+    KYC_UPDATE: "/kyc-documents/status"
+
 
 };
