@@ -5,6 +5,12 @@ import {
     PaginatedProductResponse,
     ApiResponse,
     ProductImage,
+
+    SellingPriceDto,
+    SellingPriceResponse,
+    SellingPriceListResponse,
+    SellingPriceActionResponse,
+    UpdateSellingPricePayload,    
 } from "./product.types";
 
 export const productApi = api.injectEndpoints({
@@ -130,6 +136,78 @@ export const productApi = api.injectEndpoints({
                 { type: "ProductImage", id: productId },
             ],
         }),
+
+
+        // ======================================================
+        // SELLING PRICES
+        // ======================================================
+
+        getSellingPrices: builder.query<SellingPriceDto[], void>({
+            query: () => API_ROUTES.SELLING_PRICES,
+            transformResponse: (res: SellingPriceListResponse) => res.data,
+            providesTags: ["SellingPrice"],
+        }),
+
+        getSellingPricesByProduct: builder.query<SellingPriceDto[], number>({
+            query: (productId) =>
+                `${API_ROUTES.SELLING_PRICES}/product/${productId}`,
+            transformResponse: (res: SellingPriceListResponse) => res.data,
+            providesTags: (result, error, productId) => [
+                { type: "SellingPrice", id: productId },
+            ],
+        }),
+
+        createSellingPrice: builder.mutation<
+            SellingPriceResponse,
+            UpdateSellingPricePayload
+        >({
+            query: (payload) => ({
+                url: API_ROUTES.SELLING_PRICES,
+                method: "POST",
+                body: payload,
+            }),
+            transformResponse: (res: SellingPriceActionResponse) => {
+                if (!res.data) {
+                    throw new Error("Invalid selling price response");
+                }
+                return res.data;
+            },
+
+            invalidatesTags: ["SellingPrice"],
+        }),
+
+        updateSellingPrice: builder.mutation<
+            SellingPriceResponse,
+            { id: number; data: UpdateSellingPricePayload }
+        >({
+            query: ({ id, data }) => ({
+                url: `${API_ROUTES.SELLING_PRICES}/${id}`,
+                method: "PUT",
+                body: data,
+            }),
+            transformResponse: (res: SellingPriceActionResponse) => {
+                if (!res.data) {
+                    throw new Error("Invalid selling price response");
+                }
+                return res.data;
+            },
+
+            invalidatesTags: ["SellingPrice"],
+        }),
+
+        deleteSellingPrice: builder.mutation<
+            boolean,
+            number
+        >({
+            query: (id) => ({
+                url: `${API_ROUTES.SELLING_PRICES}/${id}`,
+                method: "DELETE",
+            }),
+            transformResponse: (res: ApiResponse<any>) => res.success,
+            invalidatesTags: ["SellingPrice"],
+        }),
+
+
     }),
 });
 
@@ -146,4 +224,11 @@ export const {
     useUploadProductImagesMutation,
     useDeleteProductImageMutation,
     useToggleProductImageStatusMutation,
+
+    // 🔹 SELLING PRICE HOOKS
+    useGetSellingPricesQuery,
+    useGetSellingPricesByProductQuery,
+    useCreateSellingPriceMutation,
+    useUpdateSellingPriceMutation,
+    useDeleteSellingPriceMutation,    
 } = productApi;

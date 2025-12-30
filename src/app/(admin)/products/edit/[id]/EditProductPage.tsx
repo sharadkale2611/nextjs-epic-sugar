@@ -115,13 +115,33 @@ export default function EditProductPage() {
     return (
         <div className="mx-auto max-w-5xl px-6 py-8">
             {/* Header */}
-            <div className="mb-6">
-                <h1 className="text-2xl font-semibold text-gray-900">
-                    Edit Product
-                </h1>
-                <p className="text-sm text-gray-500">
-                    Update product information
-                </p>
+            <div className="mb-6 flex items-center justify-between">
+                <div>
+                    <h1 className="text-2xl font-semibold text-gray-900">
+                        Edit Product
+                    </h1>
+                    <p className="text-sm text-gray-500">
+                        Update product information
+                    </p>
+                </div>
+
+                <div className="flex gap-3">
+                    {/* Back to Product List */}
+                    <button
+                        onClick={() => router.push("/products")}
+                        className="rounded border px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                        ← Product List
+                    </button>
+
+                    {/* View Product */}
+                    <button
+                        onClick={() => router.push(`/products/${productId}`)}
+                        className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                    >
+                        View Product
+                    </button>
+                </div>
             </div>
 
             <div className="rounded-xl border bg-white shadow-sm">

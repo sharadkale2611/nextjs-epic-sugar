@@ -1,3 +1,4 @@
+// src/proxy.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -7,18 +8,17 @@ export function proxy(request: NextRequest) {
 
     const isAuthPage = pathname.startsWith("/signin");
 
-    // ❌ Not logged in → block protected routes
     if (!token && !isAuthPage) {
         return NextResponse.redirect(new URL("/signin", request.url));
     }
 
-    // ✅ Logged in → block auth pages
     if (token && isAuthPage) {
         return NextResponse.redirect(new URL("/", request.url));
     }
 
     return NextResponse.next();
 }
+
 
 export const config = {
     matcher: [
