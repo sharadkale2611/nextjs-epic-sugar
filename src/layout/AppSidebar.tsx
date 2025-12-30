@@ -81,7 +81,7 @@ const othersItems: NavItem[] = [
   {
     icon: <Icon name="BoxCubeIcon" />,
     name: "States",
-    path: "/line-chart"
+    path: "/settings/states",
   },
   {
     icon: <Icon name="BoxCubeIcon" />,
