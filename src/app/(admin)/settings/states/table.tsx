@@ -67,10 +67,7 @@ const StateTable = ({ data }: Props) => {
                                 {index + 1}
                             </td>
 
-                            <td
-                                className="px-6 py-4 cursor-pointer text-blue-600 hover:underline"
-                                onClick={() => router.push(`/settings/states/${item.id}`)}
-                            >
+                            <td className="px-6 py-4  text-gray-600" >
                                 {item.stateName}
                             </td>
 
@@ -89,7 +86,7 @@ const StateTable = ({ data }: Props) => {
                                     Edit
                                 </Button>
 
-                                <Button
+                                {/* <Button
                                     size="xs"
                                     variant="danger"
                                     outline
@@ -98,7 +95,7 @@ const StateTable = ({ data }: Props) => {
                                     onClick={() => handleDelete(item.id)}
                                 >
                                     Delete
-                                </Button>
+                                </Button> */}
                             </td>
                         </tr>
                     ))}

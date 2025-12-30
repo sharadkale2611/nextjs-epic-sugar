@@ -31,8 +31,8 @@ const navItems: NavItem[] = [
 ];
 
 const othersItems: NavItem[] = [
-  { icon: <Icon name="BoxCubeIcon" />, name: "Roles", path: "/line-chart", roles: ["Super-Admin"] },
-  { icon: <Icon name="BoxCubeIcon" />, name: "Role Permissions", path: "/line-chart", roles: ["Super-Admin"] },
+  // { icon: <Icon name="BoxCubeIcon" />, name: "Roles", path: "/line-chart", roles: ["Super-Admin"] },
+  // { icon: <Icon name="BoxCubeIcon" />, name: "Role Permissions", path: "/line-chart", roles: ["Super-Admin"] },
   { icon: <Icon name="BoxCubeIcon" />, name: "States", path: "/settings/states", roles: ["Super-Admin"] },
   { icon: <Icon name="BoxCubeIcon" />, name: "Cities", path: "/settings/cities", roles: ["Super-Admin"] },
 
