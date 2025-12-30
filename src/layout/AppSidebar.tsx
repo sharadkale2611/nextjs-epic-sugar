@@ -75,7 +75,7 @@ const navItems: NavItem[] = [
     icon: <Icon name="BoxCubeIcon" />,
     name: "Company / Buyer",
     path: "/companies",
-    roles: [ "Mill-Admin"],
+    roles: [ "Mill-Admin", "Super-Admin"],
   },
 
 
@@ -99,6 +99,13 @@ const othersItems: NavItem[] = [
     name: "Role Permissions",
     path: "/line-chart",
     roles: ["Super-Admin"],
+  },
+
+  {
+    icon: <Icon name="BoxCubeIcon" />,
+    name: "KYC Documents",
+    path: "/kyc-documents/uploads",
+    roles: ["Mill-Admin", "Company-Admin"],
   },
   {
     icon: <Icon name="BoxCubeIcon" />,

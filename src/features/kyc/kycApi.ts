@@ -3,6 +3,7 @@
 import { api } from "@/store/api";
 import {
   ApiResponse,
+  KYCDocument,
   KycVerificationResponse,
 } from "./kyc.types";
 import { API_ROUTES } from "@/lib/apiRoutes";
@@ -36,10 +37,43 @@ export const kycApi = api.injectEndpoints({
       }),
       invalidatesTags: ["KYC"],
     }),
+
+
+updateKycDocument: builder.mutation<
+  KYCDocument,
+  FormData
+>({
+  query: (formData) => {
+    const kycId = formData.get("KycId");
+
+    return {
+      url: API_ROUTES.KYC_UPLOADS(Number(kycId)),
+      method: "PUT",
+      body: formData,
+    };
+  },
+
+  transformResponse: (res: ApiResponse<KYCDocument>) => res.data,
+
+  invalidatesTags: (result) =>
+    result
+      ? [{ type: "KYC", userId: result.userId }]
+      : ["KYC"],
+}),
+
+
+
+
   }),
 });
+
+
+
+
 
 export const {
   useGetKycVerificationQuery,
   useUpdateKycStatusMutation,
+  useUpdateKycDocumentMutation,
+
 } = kycApi;

@@ -17,6 +17,7 @@ export const API_ROUTES = {
     PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
     KYC: "/kyc-documents/verification",
     KYC_UPDATE: "/kyc-documents/status",
+    KYC_UPLOADS: (id: number) => `/kyc-documents/${id}`,
     PRODUCT_IMAGES: "/product-images",
     // PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
 };
