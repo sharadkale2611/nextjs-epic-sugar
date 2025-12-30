@@ -115,7 +115,7 @@ const othersItems: NavItem[] = [
   {
     icon: <Icon name="BoxCubeIcon" />,
     name: "Cities",
-    path: "/line-chart",
+    path: "/setting/city",
     roles: ["Super-Admin"],
   },
 ];

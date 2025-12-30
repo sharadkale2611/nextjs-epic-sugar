@@ -1,21 +1,25 @@
 export const API_ROUTES = {
-    STATES: "/states",
-    CITIES: "/cities/state",
-    AUTH: {
-        LOGIN: "/auth/login",
-        LOGOUT: "/auth/logout",
-    },
+  STATES: "/states",
 
-    // Add Authebntication routes here in the future
-    MILLS: "/mills",
-    MILL_DETAILS: (id: number) => `/mills/mill-details/${id}`,
+  // City CRUD
+  CITIES: "/cities",
 
-    COMPANIES: "/companies",
-    COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
+  // Used only for cascading dropdown in Location module
+  CITIES_BY_STATE: "/cities/state",
 
-    PRODUCTS: "/products",
-    PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
+  AUTH: {
+    LOGIN: "/auth/login",
+    LOGOUT: "/auth/logout",
+  },
 
-    PRODUCT_IMAGES: "/product-images",
-    // PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
+  MILLS: "/mills",
+  MILL_DETAILS: (id: number) => `/mills/mill-details/${id}`,
+
+  COMPANIES: "/companies",
+  COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
+
+  PRODUCTS: "/products",
+  PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
+
+  PRODUCT_IMAGES: "/product-images",
 };
