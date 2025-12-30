@@ -65,7 +65,7 @@ const CityTable = ({ data }: Props) => {
               <td className="px-6 py-3">{index + 1}</td>
 
               <td className="px-6 py-3">
-                <Link href={`/setting/city/${item.id}`}>
+                <Link href={`/settings/cities/${item.id}`}>
                   {item.cityName}
                 </Link>
               </td>
@@ -77,7 +77,7 @@ const CityTable = ({ data }: Props) => {
               <td className="px-6 py-3 text-center space-x-2">
 
                 {/* Edit */}
-                <Link href={`/setting/city/edit/${item.id}`}>
+                <Link href={`/settings/cities/edit/${item.id}`}>
                   <Button
                     size="xs"
                     variant="primary"
@@ -89,7 +89,7 @@ const CityTable = ({ data }: Props) => {
                 </Link>
 
                 {/* Delete */}
-                <Button
+                {/* <Button
                   size="xs"
                   variant="danger"
                   outline
@@ -99,7 +99,7 @@ const CityTable = ({ data }: Props) => {
                   onClick={() => handleDelete(item.id)}
                 >
                   {isLoading ? "Deleting..." : "Delete"}
-                </Button>
+                </Button> */}
 
               </td>
 

@@ -66,7 +66,7 @@ export default function CreateCityPage() {
         variant: "success",
       });
 
-      router.push("/setting/city");
+      router.push("/settings/cities");
 
     } catch (err) {
       setFormError("Something went wrong while saving the city.");

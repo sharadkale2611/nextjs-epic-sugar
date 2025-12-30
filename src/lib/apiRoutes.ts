@@ -1,6 +1,6 @@
 export const API_ROUTES = {
   STATES: "/states",
-  CITIES: "/cities/state",
+  CITIES: "/cities",
   AUTH: {
     LOGIN: "/auth/login",
     LOGOUT: "/auth/logout",

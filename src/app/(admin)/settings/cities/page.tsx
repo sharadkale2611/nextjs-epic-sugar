@@ -48,7 +48,7 @@ export default function CityListPage() {
           title="City List"
           desc={`Total ${totalCount} records found.`}
           action={
-            <Link href="/setting/city/create">
+            <Link href="/settings/cities/create">
               <button className="btn btn-primary text-sm">
                 + Add City
               </button>

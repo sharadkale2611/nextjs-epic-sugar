@@ -57,7 +57,7 @@ export default function EditCityPage() {
       variant: "success",
     });
 
-    router.push("/setting/city");
+    router.push("/settings/cities");
   };
 
   return (
