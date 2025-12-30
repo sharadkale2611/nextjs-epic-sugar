@@ -1,23 +1,18 @@
 import { logoutAction } from "@/features/auth/authSlice";
-import { store } from "@/store";
+import { store, persistor } from "@/store";
 import Cookies from "js-cookie";
-import { redirect } from "next/navigation";
 
-export const logout = () => {
-    try {
-        // 🔹 Remove auth cookies
-        Cookies.remove("accessToken", { path: "/" });
-        Cookies.remove("refreshToken", { path: "/" });
+export const logout = async () => {
+    // 1️⃣ Clear redux state
+    store.dispatch(logoutAction());
 
-        // 🔹 Clear redux auth state
-        store.dispatch(logoutAction());
+    // 2️⃣ Clear persisted redux
+    await persistor.purge();
 
-        // 🔹 Clear local storage (optional but safe)
-        localStorage.removeItem("accessToken");
+    // 3️⃣ Remove cookies used by middleware
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
 
-        // 🔹 Redirect to signin page
-        window.location.href = "/signin";
-    } catch (error) {
-        console.error("Logout failed:", error);
-    }
+    // 4️⃣ Force hard redirect
+    window.location.replace("/signin");
 };

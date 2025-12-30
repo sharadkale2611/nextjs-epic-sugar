@@ -49,6 +49,37 @@ export const productImageUploadSchema = z.object({
 
 
 // =======================
+// ADD / UPDATE SELLING PRICE
+// =======================
+
+export const addSellingPriceSchema = z.object({
+    productId: z
+        .number()
+        .min(1, "Product is required"),
+
+    price: z
+        .number()
+        .min(0, "Price must be 0 or greater"),
+
+    status: z.boolean(),
+});
+
+
+export const updateSellingPriceSchema = z.object({
+    productId: z
+        .number()
+        .min(1, "Product is required"),
+
+    price: z
+        .number()
+        .min(0, "Price must be 0 or greater"),
+
+    status: z.boolean(),
+});
+
+
+
+// =======================
 // TYPE
 // =======================
 
@@ -56,3 +87,6 @@ export const productImageUploadSchema = z.object({
 export type ProductFormValues = z.infer<typeof productSchema>;
 
 export type ProductImageFormValues = z.infer<typeof productImageSchema>;
+
+export type AddSellingPriceFormValues = z.infer<typeof addSellingPriceSchema>;
+export type UpdateSellingPriceFormValues = z.infer<typeof updateSellingPriceSchema>;

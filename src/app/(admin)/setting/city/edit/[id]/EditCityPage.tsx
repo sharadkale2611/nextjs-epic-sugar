@@ -14,12 +14,12 @@ import {
 import { enqueueSnackbar } from "notistack";
 
 export default function EditCityPage() {
+
   const router = useRouter();
   const params = useParams();
 
-  const cityId = parseInt(
-    Array.isArray(params.id) ? params.id[0] : params.id || "0",
-    10
+  const cityId = Number(
+    Array.isArray(params.id) ? params.id[0] : params.id
   );
 
   const { data: city, isLoading } = useGetCityByIdQuery(cityId, {
@@ -34,9 +34,7 @@ export default function EditCityPage() {
     isActive: true,
   });
 
-  const [formError, setFormError] = useState<string | null>(null);
-
-  // Load API data into form
+  // Load API Data into form
   useEffect(() => {
     if (city && !isLoading) {
       setForm({
@@ -47,31 +45,19 @@ export default function EditCityPage() {
     }
   }, [city, isLoading]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
   const handleSave = async () => {
-    setFormError(null);
+    await updateCity({
+      cityId,
+      cityName: form.cityName,
+      stateId: form.stateId ?? undefined,
+      isActive: form.isActive,
+    }).unwrap();
 
-    try {
-      await updateCity({
-        cityId,
-        cityName: form.cityName,
-        stateId: form.stateId ?? undefined,
-        isActive: form.isActive,
-      }).unwrap();
+    enqueueSnackbar("City updated successfully", {
+      variant: "success",
+    });
 
-      enqueueSnackbar("City updated successfully", {
-        variant: "success",
-      });
-
-      router.push("/setting/city");
-    } catch {
-      setFormError("Something went wrong while updating the city.");
-    }
+    router.push("/setting/city");
   };
 
   return (
@@ -85,76 +71,62 @@ export default function EditCityPage() {
       <div className="rounded-xl border bg-white shadow-sm">
         <div className="space-y-8 p-6">
 
-          {formError && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
-              {formError}
-            </div>
-          )}
+          {/* CITY NAME TEXTBOX */}
+          <CustomInput
+            label="City Name"
+            name="cityName"
+            value={form.cityName}
+            onChange={(e) =>
+              setForm(prev => ({
+                ...prev,
+                cityName: e.target.value,
+              }))
+            }
+          />
 
-          {/* CITY DETAILS */}
-          <section>
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-700">
-              City Details
-            </h3>
+          {/* STATE DROPDOWN ONLY (City dropdown hidden) */}
+          <div className="hide-city-dropdown">
+            <LocationSelector
+              stateId={form.stateId}
+              cityId={null}
+              onStateChange={(val) =>
+                setForm(prev => ({
+                  ...prev,
+                  stateId: val ?? null,
+                }))
+              }
+              onCityChange={() => {}}
+            />
+          </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-              {/* TEXTBOX — CITY NAME */}
-              <CustomInput
-                label="City Name"
-                name="cityName"
-                value={form.cityName}
-                onChange={handleChange}
-              />
-
-              <LocationSelector
-  stateId={form.stateId}
-  cityId={null}
-
-  onStateChange={(val) =>
-    setForm(prev => ({
-      ...prev,
-      stateId: val ?? null,
-    }))
-  }
-
-  onCityChange={() => {}}   // <- required placeholder
-
-  showCity={false}          // <- hides city dropdown
-/>
-            </div>
-
-            {/* ACTIVE TOGGLE */}
-            <div className="mt-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={form.isActive}
-                  onChange={(e) =>
-                    setForm(prev => ({
-                      ...prev,
-                      isActive: e.target.checked,
-                    }))
-                  }
-                />
-                Active
-              </label>
-            </div>
-          </section>
+          {/* ACTIVE TOGGLE */}
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.isActive}
+              onChange={(e) =>
+                setForm(prev => ({
+                  ...prev,
+                  isActive: e.target.checked,
+                }))
+              }
+            />
+            Active
+          </label>
 
           {/* ACTIONS */}
           <div className="flex justify-end gap-3 border-t pt-6">
 
             <button
               onClick={() => history.back()}
-              className="rounded-lg border px-5 py-2 text-gray-700 hover:bg-gray-100"
+              className="rounded-lg border px-5 py-2"
             >
               Cancel
             </button>
 
             <button
               onClick={handleSave}
-              className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
+              className="rounded-lg bg-blue-600 px-6 py-2 text-white"
             >
               Save City
             </button>
@@ -162,6 +134,14 @@ export default function EditCityPage() {
 
         </div>
       </div>
+
+      {/* === HIDE ONLY CITY DROPDOWN (SCOPED) === */}
+      <style jsx global>{`
+        .hide-city-dropdown div:has(> select[name="city"]) {
+          display: none !important;
+        }
+      `}</style>
+
     </div>
   );
 }

@@ -21,7 +21,7 @@ export const cityApi = api.injectEndpoints({
     }),
 
     // Get all cities (optional use)
-    getCities: builder.query<City[], void>({
+   getCities: builder.query<City[], void>({
       query: () => API_ROUTES.CITIES,
       transformResponse: (res: ApiResponse<City[]>) => res.data,
       providesTags: ["City"],
@@ -72,9 +72,10 @@ export const cityApi = api.injectEndpoints({
 
 export const {
   useGetCitiesQuery,
+  
   useGetPaginatedCitiesQuery,
   useGetCityByIdQuery,
   useCreateCityMutation,
   useUpdateCityMutation,
   useDeleteCityMutation,
-} = cityApi;
+} = cityApi; 
