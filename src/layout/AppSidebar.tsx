@@ -25,7 +25,6 @@ const navItems: NavItem[] = [
   // Mill-admin
   { icon: <Icon name="BoxCubeIcon" />, name: "Products", path: "/products", roles: ["Mill-Admin"] },
 
-
   // Company-admin
   { icon: <Icon name="BoxCubeIcon" />, name: "Products Shop", path: "/products/shop", roles: ["Company-Admin"] },
 

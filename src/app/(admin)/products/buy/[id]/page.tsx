@@ -1,31 +1,71 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
 import { useGetProductByIdQuery } from "@/features/product/productApi";
+import { useCreateOrderMutation } from "@/features/order/orderApi";
 import CustomInput from "@/components/atoms/CustomInput";
 import Button from "@/components/atoms/Button";
 
 export default function BuyPage() {
     const { id } = useParams();
-    const { data: product, isLoading } = useGetProductByIdQuery(Number(id));
+    const router = useRouter();
 
+    // ✅ Product API
+    const { data: product, isLoading: productLoading } =
+        useGetProductByIdQuery(Number(id));
+
+    // ✅ Order API
+    const [createOrder, { isLoading: orderLoading }] =
+        useCreateOrderMutation();
+
+    // FORM STATE
     const [quantity, setQuantity] = useState("");
     const [driverName, setDriverName] = useState("");
     const [mobile, setMobile] = useState("");
     const [vehicleType, setVehicleType] = useState("");
     const [vehicleNumber, setVehicleNumber] = useState("");
 
-    useEffect(() => {
-        console.log("Selected product:", product);
-    }, [product]);
-
-    if (isLoading) {
-        return <div className="p-10 text-center">Loading product...</div>;
-    }
+    // TEMP: Replace with logged-in user id
+    const buyerId = 1;
 
     const basePrice = Number(product?.sellingPrice ?? 0);
     const totalPrice = Number(quantity || 0) * basePrice;
+
+    const handleOrder = async (type: "pay" | "invoice") => {
+        try {
+            const payload = {
+                productId: Number(id),
+                buyerId,
+                orderQuantity: Number(quantity),
+                totalAmount: totalPrice,
+                status: "Pending",
+
+                driverName,
+                mobileNumber: mobile,
+                vehicleNumber,
+                vehicleType,
+            };
+
+            const response = await createOrder(payload).unwrap();
+
+            const orderId = response.data.buyerPurchaseId;
+
+            if (type === "pay") {
+                router.push(`/order/payments/${orderId}`);
+            } else {
+                router.push(`/order/invoice/${orderId}`);
+            }
+
+        } catch (error: any) {
+            console.error("Order failed:", error);
+            alert(error?.data?.message || "Failed to place order");
+        }
+    };
+
+    if (productLoading) {
+        return <div className="p-10 text-center">Loading product...</div>;
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -39,10 +79,7 @@ export default function BuyPage() {
                         </h2>
 
                         <p className="text-sm mt-1">
-                            Grade:{" "}
-                            <span className="font-medium">
-                                {product?.productGrade}
-                            </span>
+                            Grade: <span className="font-medium">{product?.productGrade}</span>
                         </p>
 
                         <div className="mt-4 w-40">
@@ -51,7 +88,6 @@ export default function BuyPage() {
                                 name="quantity"
                                 type="number"
                                 value={quantity}
-                                placeholder="Enter Quantity"
                                 onChange={(e) => setQuantity(e.target.value)}
                             />
                         </div>
@@ -59,20 +95,17 @@ export default function BuyPage() {
 
                     <div className="text-right">
                         <p className="text-sm">
-                            Base Price:{" "}
-                            <span className="font-medium">₹{basePrice}</span>
+                            Base Price: <span className="font-medium">₹{basePrice}</span>
                         </p>
 
                         <p className="text-sm mt-2">
                             Total Price:{" "}
-                            <span className="font-semibold">
-                                ₹{totalPrice}
-                            </span>
+                            <span className="font-semibold">₹{totalPrice}</span>
                         </p>
                     </div>
                 </div>
 
-                {/* DRIVER & VEHICLE DETAILS */}
+                {/* DRIVER DETAILS */}
                 <h3 className="text-red-600 font-semibold mt-8 mb-4">
                     Driver & Vehicle Details
                 </h3>
@@ -80,46 +113,49 @@ export default function BuyPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <CustomInput
                         label="Driver Name"
-                        name="driverName"
                         value={driverName}
+                        name="driverName"
                         onChange={(e) => setDriverName(e.target.value)}
-                        placeholder="Enter Driver Name"
                     />
 
                     <CustomInput
                         label="Mobile Number"
-                        name="mobile"
                         value={mobile}
+                        name="mobile"
                         onChange={(e) => setMobile(e.target.value)}
-                        placeholder="Enter Mobile Number"
                     />
 
                     <CustomInput
                         label="Vehicle Type"
-                        name="vehicleType"
                         value={vehicleType}
+                        name="vehicleType"
                         onChange={(e) => setVehicleType(e.target.value)}
-                        placeholder="Truck / Tempo / Tractor"
                     />
 
                     <CustomInput
                         label="Vehicle Number"
-                        name="vehicleNumber"
                         value={vehicleNumber}
+                        name="vehicleNumber"
                         onChange={(e) => setVehicleNumber(e.target.value)}
-                        placeholder="MH-12 AB 1234"
                     />
                 </div>
 
-                {/* ACTION BUTTON */}
-                <div className="flex justify-end mt-6">
+                {/* ACTION BUTTONS */}
+                <div className="flex justify-end mt-6 gap-3">
+                    <Button
+                        variant="secondary"
+                        disabled={!quantity || orderLoading}
+                        onClick={() => handleOrder("invoice")}
+                    >
+                        Get Invoice Only
+                    </Button>
+
                     <Button
                         variant="primary"
-                        size="md"
-                        isLoading={false}
-                        disabled={!quantity}
+                        disabled={!quantity || orderLoading}
+                        onClick={() => handleOrder("pay")}
                     >
-                        Buy
+                        Buy Now
                     </Button>
                 </div>
             </div>
