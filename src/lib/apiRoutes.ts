@@ -19,4 +19,7 @@ export const API_ROUTES = {
     PRODUCT_IMAGES: "/product-images",
     // Product sellingPrice
     SELLING_PRICES: "/selling-prices",
+
+    ORDERS: "/orders",
+ 
 };
