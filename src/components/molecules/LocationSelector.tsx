@@ -24,7 +24,6 @@ interface LocationSelectorProps {
     cityCol?: GridSpan;
     stateError?: string;
     cityError?: string;
-    showCity?: boolean;
 }
 
 /* ------------------ STATIC GRID MAP (TAILWIND SAFE) ------------------ */
@@ -75,7 +74,6 @@ export default function LocationSelector({
     cityCol = { base: 12 },
     stateError,
     cityError,
-    showCity = true, 
 }: LocationSelectorProps) {
     const { data: states } = useGetStatesQuery();
     const { data: cities } = useGetCitiesQuery(stateId ?? skipToken);
@@ -97,22 +95,21 @@ export default function LocationSelector({
                 />
             </div>
 
-           {showCity && (
-  <div className={buildGridClass(cityCol)}>
-    <CustomSelect
-      label="City"
-      name="city"
-      value={cityId ?? ""}
-      disabled={!stateId}
-      onChange={(e) => onCityChange(Number(e.target.value))}
-      options={(Array.isArray(cities) ? cities : []).map(c => ({
-        id: c.cityId,
-        name: c.cityName,
-      }))}
-      error={cityError}
-    />
-  </div>
-)}
+            {/* CITY */}
+            <div className={buildGridClass(cityCol)}>
+                <CustomSelect
+                    label="City"
+                    name="city"
+                    value={cityId ?? ""}
+                    disabled={!stateId}
+                    onChange={(e) => onCityChange(Number(e.target.value))}
+                    options={cities?.map(c => ({
+                        id: c.cityId,
+                        name: c.cityName,
+                    })) || []}
+                    error={cityError}
+                />
+            </div>
         </div>
     );
 }
