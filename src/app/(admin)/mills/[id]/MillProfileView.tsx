@@ -4,6 +4,9 @@ import { useState } from "react";
 import Icon from "@/components/atoms/Icon";
 import { useGetMillDetailsQuery, useUpdateMillStatusMutation } from "@/features/mill/millApi";
 import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
+import KYCDocsPage from "@/app/(admin)/kyc-documents/verify/[userId]/page";
+
 
 /* =======================
    SMALL REUSABLE COMPONENTS
@@ -87,76 +90,137 @@ const MillUsersTable = ({ users }: any) => {
     );
 };
 
-const KYCDocumentsTable = ({ documents }: any) => {
+
+const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    const userId = documents?.[0]?.userId;
+
     return (
-        <div className="bg-white rounded-2xl shadow p-6 mt-6">
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                    <Icon name="FileIcon" className="w-6 h-6 text-blue-600" />
-                    <h2 className="text-xl font-semibold text-blue-600">KYC Documents</h2>
+        <>
+            <div className="bg-white rounded-2xl shadow p-6 mt-6">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <Icon name="FileIcon" className="w-6 h-6 text-blue-600" />
+                        <h2 className="text-xl font-semibold text-blue-600">
+                            KYC Documents
+                        </h2>
+                    </div>
+
+                    <button
+                        onClick={() => onVerifyClick(userId)}
+                        className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50"
+                    >
+                        Verify Documents
+                    </button>
                 </div>
 
-                <button className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50">
-                    <Icon name="CheckCircleIcon" className="w-4 h-4" />
-                    Verify Documents
-                </button>
-            </div>
-
-            <div className="overflow-hidden rounded-xl border">
-                <table className="w-full text-sm">
-                    <thead className="bg-gray-50 border-b">
-                        <tr className="text-left font-semibold">
-                            <th className="px-4 py-3">KYC ID</th>
-                            {/* <th className="px-4 py-3">User Name</th> */}
-                            <th className="px-4 py-3">Document Name</th>
-                            <th className="px-4 py-3">Document Number</th>
-                            <th className="px-4 py-3">Status</th>
-                            <th className="px-4 py-3">Remarks</th>
-                            <th className="px-4 py-3">Document</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {documents.map((doc: any) => (
-                            <tr key={doc.kycId} className="border-b last:border-0">
-                                <td className="px-4 py-3">{doc.kycId}</td>
-                                {/* <td className="px-4 py-3">{doc.user.userName}</td> */}
-                                <td className="px-4 py-3">{doc.documentType.documentTypeName}</td>
-                                <td className="px-4 py-3">{doc.documentNumber??'-'}</td>
-
-                                <td className="px-4 py-3">
-                                    {doc.status === "Verified" ? (
-                                        <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
-                                            <Icon name="CheckCircleIcon" className="w-4 h-4" />
-                                            Verified
-                                        </span>
-                                    ) : (
-                                        <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">
-                                                <Icon name="TimeIcon" className="w-4 h-4" />
-                                            Pending
-                                        </span>
-                                    )}
-                                </td>
-
-                                <td className="px-4 py-3">{doc.remarks}</td>
-
-                                <td className="px-4 py-3">
-                                    {doc.file ? (
-                                        <button className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full text-xs hover:bg-blue-50">
-                                            View
-                                        </button>
-                                    ) : (
-                                        "-"
-                                    )}
-                                </td>
+                <div className="overflow-hidden rounded-xl border">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50 border-b">
+                            <tr className="text-left font-semibold">
+                                <th className="px-4 py-3">KYC ID</th>
+                                <th className="px-4 py-3">Document Name</th>
+                                <th className="px-4 py-3">Document Number</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3">Remarks</th>
+                                <th className="px-4 py-3">Document</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+
+                        <tbody>
+                            {documents.map((doc: any) => (
+                                <tr key={doc.kycId} className="border-b last:border-0">
+                                    <td className="px-4 py-3">{doc.kycId}</td>
+                                    <td className="px-4 py-3">
+                                        {doc.documentType.documentTypeName}
+                                    </td>
+                                    <td className="px-4 py-3">
+                                        {doc.documentNumber ?? "-"}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {doc.status === "Verified" ? (
+                                            <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                <Icon name="CheckCircleIcon" className="w-4 h-4" />
+                                                Verified
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                <Icon name="TimeIcon" className="w-4 h-4" />
+                                                Pending
+                                            </span>
+                                        )}
+                                    </td>
+
+                                    <td className="px-4 py-3">{doc.remarks}</td>
+
+                                    <td className="px-4 py-3">
+                                        {doc.documentPath ? (
+                                            <button
+                                                onClick={() => setPreviewUrl(doc.documentPath)}
+                                                className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full text-xs hover:bg-blue-50"
+                                            >
+                                                View
+                                            </button>
+                                        ) : (
+                                            "-"
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+
+            {/* 🔹 Image Preview Modal */}
+            {previewUrl && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+
+                    {/* overlay */}
+                    <div
+                        className="absolute inset-0 bg-black/25 transition-opacity"
+                        onClick={() => setPreviewUrl(null)}
+                    />
+
+                    {/* modal box */}
+                    <div className="relative bg-white rounded-xl shadow-2xl 
+        border border-gray-100 w-full max-w-3xl p-6 animate-fadeIn">
+
+                        {/* header */}
+                        <div className="flex justify-between items-center mb-3">
+                            <h3 className="text-lg font-semibold text-gray-800">
+                                View Document
+                            </h3>
+
+                            <button
+                                onClick={() => setPreviewUrl(null)}
+                                className="px-3 py-1 rounded-md border text-gray-600 
+              hover:bg-gray-50 transition"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        {/* image */}
+                        <div className="border rounded-lg p-2 bg-gray-50">
+                            <img
+                                src={previewUrl}
+                                alt="KYC Document"
+                                className="max-h-[75vh] mx-auto object-contain rounded"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+        </>
     );
 };
+
+
+
 
 
 /* =======================
@@ -187,13 +251,53 @@ const ProfileTab = ({ mill }: any) => (
 );
 
 const UsersTab = ({ users }: any) => (
-            <MillUsersTable users={users} />
+    <MillUsersTable users={users} />
 
 );
 
-const KYCTab = ({ kycDocs }: any) => (
-    <KYCDocumentsTable documents={kycDocs} />
+// const KYCTab = ({ kycDocs }: any) => (
+//     <KYCDocumentsTable documents={kycDocs} />
+// );
+
+const KYCTab = ({
+    kycDocs,
+    onVerifyClick,
+    showKycVerification,
+    selectedUserId,
+    onBack
+}: any) => (
+    <>
+        {!showKycVerification && (
+            <KYCDocumentsTable documents={kycDocs} onVerifyClick={onVerifyClick} />
+        )}
+
+        {showKycVerification && selectedUserId && (
+            <div className="bg-white rounded-2xl shadow p-6 mt-6">
+
+                {/* header */}
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                        <Icon name="FileIcon" className="w-6 h-6 text-blue-600" />
+                        <h2 className="text-xl font-semibold text-blue-600">
+                            Verify KYC
+                        </h2>
+                    </div>
+
+                    <button
+                        onClick={onBack}
+                        className="flex items-center gap-2 border border-gray-400 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50"
+                    >
+                        ← Back to KYC List
+                    </button>
+                </div>
+
+                {/* 👉 Your verification table lives here */}
+                <KYCDocsPage userId={selectedUserId} />
+            </div>
+        )}
+    </>
 );
+
 
 const ProductsTab = ({ products }: any) => (
     <Section title="Products" icon="BoxCubeIcon">
@@ -213,6 +317,10 @@ const ProductsTab = ({ products }: any) => (
 
 export default function MillProfileView({ millId }: { millId: number }) {
     const [activeTab, setActiveTab] = useState("profile");
+
+
+    const [showKycVerification, setShowKycVerification] = useState(false);
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
     const { enqueueSnackbar } = useSnackbar();
 
@@ -239,8 +347,8 @@ export default function MillProfileView({ millId }: { millId: number }) {
             enqueueSnackbar("Failed to update status", { variant: "error" });
         }
     };
-    
-    
+
+
     return (
         <div className="flex gap-6 bg-slate-50 p-6 min-h-screen">
 
@@ -264,7 +372,7 @@ export default function MillProfileView({ millId }: { millId: number }) {
                                 }`}
                         />
                     </div>
-                 
+
                 </div>
             </div>
 
@@ -279,7 +387,24 @@ export default function MillProfileView({ millId }: { millId: number }) {
 
                 {activeTab === "profile" && <ProfileTab mill={mill} />}
                 {activeTab === "users" && <UsersTab users={users} />}
-                {activeTab === "kyc" && <KYCTab kycDocs={kycDocs} />}
+                {/* {activeTab === "kyc" && <KYCTab kycDocs={kycDocs} />} */}
+                {activeTab === "kyc" && (
+                    <KYCTab
+                        kycDocs={kycDocs}
+                        showKycVerification={showKycVerification}
+                        selectedUserId={selectedUserId}
+                        onVerifyClick={(userId: number) => {
+                            setSelectedUserId(userId);
+                            setShowKycVerification(true);   // always open verification
+                        }}
+                        onBack={() => {
+                            setShowKycVerification(false);  // go back to table
+                            setSelectedUserId(null);
+                        }}
+                    />
+                )}
+
+
                 {activeTab === "products" && <ProductsTab products={products} />}
             </div>
         </div>

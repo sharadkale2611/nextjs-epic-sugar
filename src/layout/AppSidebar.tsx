@@ -17,10 +17,9 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  // super-admin
   { icon: <Icon name="BoxCubeIcon" />, name: "Dashboard", path: "/" },
   { icon: <Icon name="BoxCubeIcon" />, name: "Mills", path: "/mills", roles: ["Super-Admin"] },
-  { icon: <Icon name="BoxCubeIcon" />, name: "Company / Buyer", path: "/companies", roles: ["Super-Admin"] },
+  { icon: <Icon name="BoxCubeIcon" />, name: "Company / Buyer", path: "/companies", roles: [ "Super-Admin"] },
 
   // Mill-admin
   { icon: <Icon name="BoxCubeIcon" />, name: "Products", path: "/products", roles: ["Mill-Admin"] },
@@ -28,15 +27,18 @@ const navItems: NavItem[] = [
   // Company-admin
   { icon: <Icon name="BoxCubeIcon" />, name: "Products Shop", path: "/products/shop", roles: ["Company-Admin"] },
 
+  { icon: <Icon name="BoxCubeIcon" />, name: "KYC Documents", path: "/kyc-documents/uploads", roles: ["Mill-Admin", "Company-Admin"] },
+
 ];
 
 const othersItems: NavItem[] = [
-  // { icon: <Icon name="BoxCubeIcon" />, name: "Roles", path: "/line-chart", roles: ["Super-Admin"] },
-  // { icon: <Icon name="BoxCubeIcon" />, name: "Role Permissions", path: "/line-chart", roles: ["Super-Admin"] },
+  // { icon: <Icon name="BoxCubeIcon" />, name: "Roles", path: "/", roles: ["Super-Admin"] },
+  // { icon: <Icon name="BoxCubeIcon" />, name: "Role Permissions", path: "/", roles: ["Super-Admin"] },
+  // { icon: <Icon name="BoxCubeIcon" />, name: "Document Types", path: "/", roles: ["Super-Admin"] },  
   { icon: <Icon name="BoxCubeIcon" />, name: "States", path: "/settings/states", roles: ["Super-Admin"] },
-  { icon: <Icon name="BoxCubeIcon" />, name: "Cities", path: "/settings/cities", roles: ["Super-Admin"] },
-
+  { icon: <Icon name="BoxCubeIcon" />, name: "Cities", path: "/settings/cities", roles: ["Super-Admin"] },  
 ];
+
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
