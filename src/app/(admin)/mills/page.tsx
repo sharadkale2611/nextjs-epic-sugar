@@ -4,32 +4,35 @@ import { useState } from "react";
 import ComponentCard from "@/components/common/ComponentCard";
 import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import Pagination from "@/components/tables/Pagination";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import MillTable from "./table";
 import Button from "@/components/atoms/Button";
-
+import MillTable from "./table";
+import { useGetPaginatedMillsQuery } from "@/features/mill/millApi";
+import { Mill } from "@/features/mill/mill.types";
 
 export default function Mills() {
     const [currentPage, setCurrentPage] = useState(1);
-    const router = useRouter();
-
-
-    const millsData = Array.from({ length: 50 }, (_, i) => ({
-        id: i + 1,
-        millName: `Mill ${i + 1}`,
-        location: "Maharashtra",
-        contactPerson: `Person ${i + 1}`
-    }));
-
     const itemsPerPage = 5;
-    const totalPages = Math.ceil(millsData.length / itemsPerPage);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedData = millsData.slice(
-        startIndex,
-        startIndex + itemsPerPage
-    );
+    const { data, isLoading, isError } = useGetPaginatedMillsQuery({
+        pageNumber: currentPage,
+        pageSize: itemsPerPage,
+    });
+
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading mills.</div>;
+
+    // ✅ Correct access
+    const mills: Mill[] = data?.data ?? [];
+    const totalPages = data?.totalPages ?? 1;
+    const totalCount = data?.totalCount ?? 0;
+
+    const transformedData = mills.map((mill) => ({
+        id: mill.millId,
+        millName: mill.millName,
+        location: mill.address,
+        contactPerson: mill.contactPerson,
+    }));
 
     return (
         <>
@@ -38,7 +41,7 @@ export default function Mills() {
             <div className="space-y-6">
                 <ComponentCard
                     title="Mill List"
-                    desc="Total 30 record found."
+                    desc={`Total ${totalCount} records found.`}
                     action={
                         <Link href="/mills/create">
                             <Button variant="primary" size="sm">
@@ -47,7 +50,8 @@ export default function Mills() {
                         </Link>
                     }
                 >
-                    <MillTable data={paginatedData} />
+                    {/* add dynamic data */}
+                    <MillTable data={transformedData} />
 
                     <Pagination
                         currentPage={currentPage}

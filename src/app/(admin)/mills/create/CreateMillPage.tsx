@@ -1,28 +1,29 @@
 "use client";
 
+import Button from "@/components/atoms/Button";
 import CustomInput from "@/components/atoms/CustomInput";
-import CustomSelect from "@/components/atoms/CustomSelect";
 import LocationSelector from "@/components/molecules/LocationSelector";
+import { millSchema, useCreateMillMutation } from "@/features/mill";
+import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
-interface StateOption {
-    id: number;
-    name: string;
-}
-
-interface CityOption {
-    id: number;
-    name: string;
-}
-
 export default function CreateMillPage() {
+
+    const [createMill, { isLoading, isSuccess, error }] = useCreateMillMutation();
+    const [errors, setErrors] = useState<Record<string, string>>({});
+    const [formError, setFormError] = useState<string | null>(null);
+
+    const router = useRouter();
+
+
     const [form, setForm] = useState({
         millName: "",
         millCode: "",
         address: "",
         stateId: null as number | null,
         cityId: null as number | null,
-        country: "",
+        country: "India",
         pincode: "",
         contactPerson: "",
         contactNumber: "",
@@ -37,25 +38,42 @@ export default function CreateMillPage() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleStateChange = (stateId: number) => {
-        setForm((prev) => ({
-            ...prev,
-            stateId,
-            cityId: null, // reset city when state changes
-        }));
+
+    const handleSave = async () => {
+        setErrors({});
+        setFormError(null);
+
+        const result = millSchema.safeParse(form);
+
+        if (!result.success) {
+            const fieldErrors: Record<string, string> = {};
+
+            result.error.issues.forEach((issue) => {
+                const field = issue.path[0] as string;
+                fieldErrors[field] = issue.message;
+            });
+
+            setErrors(fieldErrors);
+            setFormError("Please fix the errors below and try again.");
+            return;
+        }
+
+        try {
+            const response = await createMill(result.data).unwrap();
+
+            console.log("Mill created successfully!", response);
+            // ✅ SUCCESS SNACKBAR
+            enqueueSnackbar("Mill created successfully", {
+                variant: "success",
+            });
+
+            // ✅ Redirect to detail page
+            router.push(`/mills/${response.millId}`);            
+        } catch (err) {
+            setFormError("Something went wrong while saving the mill.");
+        }
     };
 
-    const handleCityChange = (cityId: number) => {
-        setForm((prev) => ({
-            ...prev,
-            cityId,
-        }));
-    };
-
-
-    const handleSave = () => {
-        console.log("Mill Data:", form);
-    };
 
     return (
         <div className="mx-auto max-w-6xl px-6 py-8">
@@ -70,6 +88,11 @@ export default function CreateMillPage() {
             {/* Card Container */}
             <div className="rounded-xl border bg-white shadow-sm">
                 <div className="space-y-10 p-6">
+                    {formError && (
+                        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-600">
+                            {formError}
+                        </div>
+                    )}
 
                     {/* Basic Info */}
                     <section>
@@ -78,9 +101,9 @@ export default function CreateMillPage() {
                         </h3>
 
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <CustomInput label="Mill Name" name="millName" value={form.millName} onChange={handleChange} />
-                            <CustomInput label="Mill Code" name="millCode" value={form.millCode} onChange={handleChange} />
-                            <CustomInput label="Address" name="address" value={form.address} onChange={handleChange} />
+                            <CustomInput label="Mill Name" name="millName" value={form.millName} onChange={handleChange} error={errors.millName} />
+                            <CustomInput label="Mill Code" name="millCode" value={form.millCode} onChange={handleChange} error={errors.millCode} />
+                            <CustomInput label="Address" name="address" value={form.address} onChange={handleChange} error={errors.address} />
                         </div>
                     </section>
 
@@ -103,10 +126,9 @@ export default function CreateMillPage() {
                             cityCol={{ base: 12, md: 6 }}
                         />
 
-
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 mt-4">
-                            <CustomInput label="Pin Code" name="pincode" value={form.pincode} onChange={handleChange} />
-                            <CustomInput label="Country" name="country" value={form.country} onChange={handleChange} />
+                            <CustomInput label="Pin Code" name="pincode" value={form.pincode} onChange={handleChange} error={errors.pincode} />
+                            <CustomInput label="Country" name="country" value={form.country} onChange={handleChange} error={errors.country} />
                         </div>
                     </section>
 
@@ -117,28 +139,29 @@ export default function CreateMillPage() {
                         </h3>
 
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <CustomInput label="Contact Person" name="contactPerson" value={form.contactPerson} onChange={handleChange} />
-                            <CustomInput label="Contact Number" name="contactNumber" value={form.contactNumber} onChange={handleChange} />
-                            <CustomInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} />
-                            <CustomInput label="GST Number" name="gstNumber" value={form.gstNumber} onChange={handleChange} />
+                            <CustomInput label="Contact Person" name="contactPerson" value={form.contactPerson} onChange={handleChange} error={errors.contactPerson} />
+                            <CustomInput label="Contact Number" name="contactNumber" value={form.contactNumber} onChange={handleChange} error={errors.contactNumber} />
+                            <CustomInput label="Email" name="email" type="email" value={form.email} onChange={handleChange} error={errors.email} />
+                            <CustomInput label="GST Number" name="gstNumber" value={form.gstNumber} onChange={handleChange} error={errors.gstNumber} />
                         </div>
                     </section>
 
                     {/* Actions */}
                     <div className="flex justify-end gap-3 border-t pt-6">
-                        <button
+                        <Button
+                            variant="default"
                             onClick={() => history.back()}
-                            className="rounded-lg border px-5 py-2 text-gray-700 hover:bg-gray-100"
                         >
                             Cancel
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
+                            variant="primary"
                             onClick={handleSave}
-                            className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
+                            isLoading={isLoading}
                         >
                             Save Mill
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -1,11 +1,11 @@
-import React from 'react'
+"use client";
 
-function page() {
-  return (
-    <div>
-      Mill Details
-    </div>
-  )
+import { useParams } from "next/navigation";
+import MillProfileView from "./MillProfileView";
+
+export default function MillDetailsPage() {
+  const params = useParams();
+  const millId = Number(params.id);
+
+  return <MillProfileView millId={millId} />;
 }
-
-export default page

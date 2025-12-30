@@ -18,9 +18,9 @@ const CompaniesTable = ({ data }: Props) => {
                 <thead className="bg-gray-100 text-xs uppercase text-gray-700">
                     <tr>
                         <th className="px-6 py-3">ID</th>
-                        <th className="px-6 py-3"> Company Name</th>
+                        <th className="px-6 py-3">Company Name</th>
                         <th className="px-6 py-3">Location</th>
-                        <th className="px-6 py-3">Contact Details</th>
+                        <th className="px-6 py-3">Contact</th>
                         <th className="px-6 py-3 text-center">Action</th>
                     </tr>
                 </thead>
@@ -35,31 +35,37 @@ const CompaniesTable = ({ data }: Props) => {
                             <td className="px-6 py-4 font-medium text-gray-800">
                                 {item.id}
                             </td>
-                            <td className="px-6 py-4"><Link href={`/companies/${item.id}`}>{item.companyName}</Link></td>
+
+                            <td className="px-6 py-4">
+                                <Link href={`/companies/${item.id}`}>
+                                    {item.companyName}
+                                </Link>
+                            </td>
+
                             <td className="px-6 py-4">{item.location}</td>
+
                             <td className="px-6 py-4">{item.contactDetails}</td>
+
                             <td className="px-6 py-4 text-center space-x-2">
                                 <Link href={`/companies/edit/${item.id}`}>
                                     <Button
                                         size="xs"
                                         variant="primary"
                                         outline
-                                        startIcon={<Icon name="PencilIcon"  className="w-5 h-5" />}
+                                        startIcon={<Icon name="PencilIcon" className="w-5 h-5" />}
                                     >
                                         Edit
                                     </Button>
-
                                 </Link>
-                                <Button
+
+                                {/* <Button
                                     size="xs"
                                     variant="danger"
                                     outline
-                                    startIcon={<Icon name="TrashBinIcon"  className="w-5 h-5" />}
+                                    startIcon={<Icon name="TrashBinIcon" className="w-5 h-5" />}
                                 >
                                     Delete
-                                </Button>
-
-
+                                </Button> */}
                             </td>
                         </tr>
                     ))}

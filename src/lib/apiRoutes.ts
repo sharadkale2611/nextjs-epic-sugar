@@ -7,4 +7,15 @@ export const API_ROUTES = {
     },
 
     // Add Authebntication routes here in the future
+    MILLS: "/mills",
+    MILL_DETAILS: (id: number) => `/mills/mill-details/${id}`,
+
+    COMPANIES: "/companies",
+    COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
+
+    PRODUCTS: "/products",
+    PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
+
+    PRODUCT_IMAGES: "/product-images",
+    // PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
 };

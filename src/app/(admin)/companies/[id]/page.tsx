@@ -1,11 +1,11 @@
-import React from 'react'
+"use client";
 
-function page() {
-  return (
-    <div>
-      Company details
-    </div>
-  )
+import { useParams } from "next/navigation";
+import CompanyProfileView from "./CompanyProfileView";
+
+export default function CompanyDetailsPage() {
+  const params = useParams();
+  const companyId = Number(params.id);
+
+  return <CompanyProfileView companyId={companyId} />;
 }
-
-export default page

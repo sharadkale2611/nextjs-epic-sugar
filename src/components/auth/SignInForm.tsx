@@ -39,30 +39,29 @@ export default function SignInForm() {
     try {
       const response = await login({ username, password }).unwrap();
 
-      // 🔹 Save auth data in redux
+      // ✅ Save in Redux
       dispatch(setCredentials(response));
 
-      // 🔹 Store token in cookie (required for middleware)
+      // ✅ Store tokens in cookies
       Cookies.set("accessToken", response.accessToken, {
-        expires: rememberMe ? 7 : undefined, // 7 days if remember me
+        expires: rememberMe ? 7 : undefined,
         path: "/",
         sameSite: "lax",
       });
 
-      // 🔹 Optional: keep localStorage for app usage
-      if (rememberMe) {
-        localStorage.setItem("accessToken", response.accessToken);
-      } else {
-        localStorage.removeItem("accessToken");
-      }
+      Cookies.set("refreshToken", response.refreshToken, {
+        expires: 7,
+        path: "/",
+        sameSite: "lax",
+      });
 
-      // ✅ Redirect after login
+      // ✅ Redirect
       router.replace("/");
-
-    } catch (error) {
-      setError("Invalid username or password");
+    } catch (err: any) {
+      setError(err?.data?.message || "Invalid username or password");
     }
   };
+
 
 
   return (
