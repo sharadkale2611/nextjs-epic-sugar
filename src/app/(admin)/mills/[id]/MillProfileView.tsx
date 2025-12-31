@@ -6,6 +6,7 @@ import { useGetMillDetailsQuery, useUpdateMillStatusMutation } from "@/features/
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import KYCDocsPage from "@/app/(admin)/kyc-documents/verify/[userId]/page";
+import { Product } from "@/features/mill";
 
 
 /* =======================
@@ -299,17 +300,89 @@ const KYCTab = ({
 );
 
 
-const ProductsTab = ({ products }: any) => (
-    <Section title="Products" icon="BoxCubeIcon">
-        {products.length === 0 ? (
-            <p className="text-gray-500">No products available</p>
-        ) : (
-            products.map((p: any, i: number) => (
-                <InfoRow key={i} label={p.name} value={p.status} />
-            ))
-        )}
-    </Section>
-);
+const ProductsTab = ({ products }: { products: Product[] }) => {
+    return (
+        <div className="bg-white rounded-2xl shadow p-6">
+            <div className="flex items-center gap-2 mb-4">
+                <Icon name="BoxCubeIcon" className="w-6 h-6 text-blue-600" />
+                <h2 className="text-xl font-semibold text-blue-600">
+                    Products
+                </h2>
+            </div>
+
+            {products.length === 0 ? (
+                <p className="text-gray-500">No products available</p>
+            ) : (
+                <div className="overflow-x-auto rounded-xl border">
+                    <table className="w-full text-sm">
+                        <thead className="bg-gray-50 border-b">
+                            <tr className="text-left font-semibold">
+                                <th className="px-4 py-3">Product</th>
+                                <th className="px-4 py-3">Grade</th>
+                                <th className="px-4 py-3">Stock</th>
+                                <th className="px-4 py-3">Price</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3">Images</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {products.map((p) => (
+                                <tr key={p.productId} className="border-b last:border-0">
+                                    <td className="px-4 py-3 font-medium">
+                                        {p.productName}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {p.productGrade || "-"}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {p.stockQuantity}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        ₹{p.sellingPrice ?? "-"}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {p.status ? (
+                                            <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                Active
+                                            </span>
+                                        ) : (
+                                            <span className="inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-medium">
+                                                Inactive
+                                            </span>
+                                        )}
+                                    </td>
+
+                                    <td className="px-4 py-3">
+                                        {p.images?.length > 0 ? (
+                                            <div className="flex gap-2">
+                                                {p.images.slice(0, 3).map((img, i) => (
+                                                    <img
+                                                        key={i}
+                                                        src={img.productImagePath}
+                                                        alt="product"
+                                                        className="w-10 h-10 rounded object-cover border"
+                                                    />
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            "-"
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+};
+
 
 /* =======================
    MAIN PAGE
