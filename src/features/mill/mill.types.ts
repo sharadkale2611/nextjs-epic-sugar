@@ -136,6 +136,21 @@ export interface DocumentType {
     isDeleted: boolean;
 }
 
+
+export interface ProductImage {
+    productImagePath: string;
+}
+
 export interface Product {
-    // Empty for now (API returns empty array)
+    productId: number;
+    productName: string;
+    productGrade: string | null;
+    millId: number;
+    stockQuantity: number;
+    millName?: string | null;
+    status: boolean;
+    currentPrice: number | null;
+    sellingPrice: number | null;
+    createdAt: string;
+    images: ProductImage[];
 }
