@@ -37,6 +37,8 @@ const othersItems: NavItem[] = [
   // { icon: <Icon name="BoxCubeIcon" />, name: "Document Types", path: "/", roles: ["Super-Admin"] },  
   { icon: <Icon name="BoxCubeIcon" />, name: "States", path: "/settings/states", roles: ["Super-Admin"] },
   { icon: <Icon name="BoxCubeIcon" />, name: "Cities", path: "/settings/cities", roles: ["Super-Admin"] },  
+    { icon: <Icon name="BoxCubeIcon" />, name: "DocumentTypes", path: "/settings/documenttypes", roles: ["Super-Admin"] },  
+
 ];
 
 
