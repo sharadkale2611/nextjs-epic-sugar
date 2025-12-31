@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import CustomInput from "@/components/atoms/CustomInput";
 import LocationSelector from "@/components/molecules/LocationSelector";
-
 import {
   useGetCityByIdQuery,
   useUpdateCityMutation,
 } from "@/features/city";
 
 import { enqueueSnackbar } from "notistack";
+import { useGetStatesQuery } from "@/features/states/stateApi";
+
 
 export default function EditCityPage() {
 
@@ -27,6 +27,7 @@ export default function EditCityPage() {
   });
 
   const [updateCity] = useUpdateCityMutation();
+const { data: states = [] } = useGetStatesQuery();
 
   const [form, setForm] = useState({
     cityName: "",
@@ -35,15 +36,18 @@ export default function EditCityPage() {
   });
 
   // Load API Data into form
-  useEffect(() => {
-    if (city && !isLoading) {
-      setForm({
-        cityName: city.cityName,
-        stateId: city.stateId ?? null,
-        isActive: city.isActive,
-      });
-    }
-  }, [city, isLoading]);
+ useEffect(() => {
+  if (!city || isLoading) return;
+
+  setForm({
+    cityName: city.cityName ?? "",
+    stateId: city.stateId ?? null,
+    isActive: city.isActive,
+  });
+}, [city, isLoading]);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (!city) return <div>City not found</div>;
 
   const handleSave = async () => {
     await updateCity({
@@ -85,19 +89,46 @@ export default function EditCityPage() {
           />
 
           {/* STATE DROPDOWN ONLY (City dropdown hidden) */}
-          <div className="hide-city-dropdown">
-            <LocationSelector
-              stateId={form.stateId}
-              cityId={null}
-              onStateChange={(val) =>
-                setForm(prev => ({
-                  ...prev,
-                  stateId: val ?? null,
-                }))
-              }
-              onCityChange={() => {}}
-            />
-          </div>
+          {/* <div className="hide-city-dropdown">
+  {form.stateId !== null && (
+    <LocationSelector
+      stateId={form.stateId}
+      cityId={null}
+      onStateChange={(val) =>
+        setForm(prev => ({
+          ...prev,
+          stateId: val ?? null,
+        }))
+      }
+      onCityChange={() => {}}
+    />
+  )}
+</div> */}
+
+<div className="flex flex-col gap-1">
+  <label className="text-sm font-medium text-gray-700">
+    State
+  </label>
+
+  <select
+    value={form.stateId ?? ""}
+    onChange={(e) =>
+      setForm(prev => ({
+        ...prev,
+        stateId: Number(e.target.value),
+      }))
+    }
+    className="border rounded-lg px-3 py-2"
+  >
+    <option value="">Select State</option>
+
+    {states.map(state => (
+      <option key={state.stateId} value={state.stateId}>
+        {state.stateName}
+      </option>
+    ))}
+  </select>
+</div>
 
           {/* ACTIVE TOGGLE */}
           <label className="flex items-center gap-2">

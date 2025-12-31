@@ -28,11 +28,16 @@ export const cityApi = api.injectEndpoints({
     }),
 
     // Get city by id
+    // getCityById: builder.query<City, number>({
+    //   query: (id) => `${API_ROUTES.CITIES}/state/${id}`,
+    //   transformResponse: (res: ApiResponse<City>) => res.data,
+    //   providesTags: (result, error, id) => [{ type: "City", id }],
+    // }),
     getCityById: builder.query<City, number>({
-      query: (id) => `${API_ROUTES.CITIES}/state/${id}`,
-      transformResponse: (res: ApiResponse<City>) => res.data,
-      providesTags: (result, error, id) => [{ type: "City", id }],
-    }),
+  query: (id) => `${API_ROUTES.CITIES}/${id}`,
+  transformResponse: (res: ApiResponse<City>) => res.data,
+  providesTags: (result, error, id) => [{ type: "City", id }],
+}),
 
     // Create city
     createCity: builder.mutation<City, Partial<City>>({
