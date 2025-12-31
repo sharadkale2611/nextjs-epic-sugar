@@ -4,14 +4,23 @@ import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
 import LogoutButton from "@/components/molecules/LogoutButton";
 import { useSidebar } from "@/context/SidebarContext";
+import { RootState } from "@/store";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState ,useEffect,useRef} from "react";
+import { useSelector } from "react-redux";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+
+  const user = useSelector((state: RootState) => state.auth.user);
+  const userRoles = user?.roles || [];
+  const formattedRoles = userRoles.length > 0
+    ? `(${userRoles.join(', ')})`
+    : '';
+
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -123,7 +132,7 @@ const AppHeader: React.FC = () => {
 
           <div className="hidden lg:block">
             <div className="relative">
-              <h2 className="text-xl dark:text-white">Epic Sugar (Admin)</h2>
+              <h2 className="text-xl dark:text-white">Epic Sugar {formattedRoles}</h2>
             </div>
           </div>
         </div>
