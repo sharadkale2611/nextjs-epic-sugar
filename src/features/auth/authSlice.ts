@@ -1,7 +1,6 @@
 // src/features/auth/authSlice.ts
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
 
 interface AuthState {
     user: any | null;
@@ -14,6 +13,7 @@ const initialState: AuthState = {
     accessToken: null,
     refreshToken: null,
 };
+
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -23,14 +23,10 @@ const authSlice = createSlice({
             state.accessToken = action.payload.accessToken;
             state.refreshToken = action.payload.refreshToken;
         },
-
         logoutAction: (state) => {
             state.user = null;
             state.accessToken = null;
             state.refreshToken = null;
-
-            // ✅ Clear cookie on logout
-            Cookies.remove("accessToken");
         },
     },
 });

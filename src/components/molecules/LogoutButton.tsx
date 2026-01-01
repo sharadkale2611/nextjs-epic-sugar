@@ -9,7 +9,7 @@ export default function LogoutButton() {
 
     const handleLogout = () => {
         logout();
-        router.replace("/auth/login");
+        router.replace("/signin");
     };
 
     return (

@@ -9,6 +9,8 @@ import Button from "@/components/atoms/Button";
 import CompaniesTable from "./table";
 import { useGetPaginatedCompaniesQuery } from "@/features/company/companyApi";
 import { Company } from "@/features/company/company.types";
+import RequireRole from "@/components/auth/RequireRole";
+import { ROLES } from "@/constants/roles";
 
 export default function Companies() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +36,8 @@ export default function Companies() {
     }));
 
     return (
-        <>
+        <RequireRole allowedRoles={[ROLES.SUPER_ADMIN, ROLES.COMPANY_ADMIN]}>
+
             <PageBreadcrumb pageTitle="Manage Companies (Buyers)" />
 
             <div className="space-y-6">
@@ -58,6 +61,6 @@ export default function Companies() {
                     />
                 </ComponentCard>
             </div>
-        </>
+        </RequireRole>
     );
 }

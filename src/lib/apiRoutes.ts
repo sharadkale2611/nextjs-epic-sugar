@@ -13,5 +13,10 @@ export const API_ROUTES = {
     COMPANIES: "/companies",
     COMPANY_DETAILS: (id: number) => `/companies/company-details/${id}`,
 
+    PRODUCTS: "/products",
+    PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
 
+    PRODUCT_IMAGES: "/product-images",
+    // Product sellingPrice
+    SELLING_PRICES: "/selling-prices",
 };
