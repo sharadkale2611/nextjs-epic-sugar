@@ -92,7 +92,7 @@ const StateTable = ({ data }: Props) => {
                                     Edit
                                 </Button>
 
-                                <Button
+                                {/* <Button
                                     size="xs"
                                     variant="danger"
                                     outline
@@ -101,7 +101,7 @@ const StateTable = ({ data }: Props) => {
                                     onClick={() => handleDelete(item.id)}
                                 >
                                     {deletingId === item.id ? "Deleting..." : "Delete"}
-                                </Button>
+                                </Button> */}
                             </td>
                         </tr>
                     ))}
