@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 import ComponentCard from "../../common/ComponentCard";
-import Button from "../../ui/button/Button";
 import { Modal } from "../../ui/modal";
 import Label from "../../form/Label";
 import Input from "../../form/input/InputField";
 import { useModal } from "@/hooks/useModal";
+import Button from "@/components/atoms/Button";
 
 export default function FormInModal() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -57,7 +57,7 @@ export default function FormInModal() {
           </div>
 
           <div className="flex items-center justify-end w-full gap-3 mt-6">
-            <Button size="sm" variant="outline" onClick={closeModal}>
+            <Button size="sm" outline onClick={closeModal}>
               Close
             </Button>
             <Button size="sm" onClick={handleSave}>

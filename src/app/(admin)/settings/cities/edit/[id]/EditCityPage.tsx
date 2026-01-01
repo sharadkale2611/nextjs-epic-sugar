@@ -12,6 +12,7 @@ import {
 } from "@/features/city";
 
 import { enqueueSnackbar } from "notistack";
+import Button from "@/components/atoms/Button";
 
 export default function EditCityPage() {
 
@@ -117,19 +118,19 @@ export default function EditCityPage() {
           {/* ACTIONS */}
           <div className="flex justify-end gap-3 border-t pt-6">
 
-            <button
+            <Button
               onClick={() => history.back()}
               className="rounded-lg border px-5 py-2"
             >
               Cancel
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={handleSave}
               className="rounded-lg bg-blue-600 px-6 py-2 text-white"
             >
               Save City
-            </button>
+            </Button>
           </div>
 
         </div>

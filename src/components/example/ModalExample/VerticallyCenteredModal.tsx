@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import ComponentCard from "../../common/ComponentCard";
-import Button from "../../ui/button/Button";
 import { Modal } from "../../ui/modal";
 import { useModal } from "@/hooks/useModal";
+import Button from "@/components/atoms/Button";
 
 export default function VerticallyCenteredModal() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -33,7 +33,7 @@ export default function VerticallyCenteredModal() {
           </p>
 
           <div className="flex items-center justify-center w-full gap-3 mt-8">
-            <Button size="sm" variant="outline" onClick={closeModal}>
+            <Button size="sm" outline onClick={closeModal}>
               Close
             </Button>
             <Button size="sm" onClick={handleSave}>

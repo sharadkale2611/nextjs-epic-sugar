@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/atoms/Button";
 import { useGetKycVerificationQuery, useUpdateKycStatusMutation } from "@/features/kyc";
 import { useState } from "react";
 
@@ -92,12 +93,12 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
                     {/* 🖼 VIEW BUTTON */}
                     <td className="px-4 py-3">
                       {doc.documentPath ? (
-                        <button
+                        <Button
                           onClick={() => setPreviewUrl(doc.documentPath)}
                           className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full text-xs hover:bg-blue-50"
                         >
                           View
-                        </button>
+                        </Button>
                       ) : (
                         "-"
                       )}
@@ -106,7 +107,7 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
 
                     {/* VERIFY BUTTON */}
                     <td className="px-4 py-3">
-                      <button
+                      <Button
                         onClick={() => {
                           setSelectedDoc(doc);
                           setStatus(doc.status || "Pending");
@@ -117,7 +118,7 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
                           bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-sm"
                       >
                         Verify
-                      </button>
+                      </Button>
                     </td>
 
                   </tr>
@@ -147,12 +148,12 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="text-lg font-semibold text-gray-800">View Document</h3>
 
-                  <button
+                  <Button
                     onClick={() => setPreviewUrl(null)}
                     className="px-3 py-1 rounded-md border text-gray-600 hover:bg-gray-50"
                   >
                     ✕
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="border rounded-lg p-2 bg-gray-50">
@@ -205,14 +206,14 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
                 />
 
                 <div className="flex justify-end gap-2 mt-4">
-                  <button
+                  <Button
                     onClick={() => setOpenModal(false)}
                     className="px-4 py-1.5 rounded-md border text-gray-600 hover:bg-gray-50"
                   >
                     Cancel
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     disabled={isUpdating}
                     onClick={async () => {
                       await updateKycStatus({
@@ -225,7 +226,7 @@ export default function KYCDocsPage({ userId }: { userId: number }) {
                     className="px-4 py-1.5 rounded-md bg-green-600 text-white hover:bg-green-700 disabled:opacity-60"
                   >
                     {isUpdating ? "Saving..." : "Submit"}
-                  </button>
+                  </Button>
                 </div>
 
               </div>

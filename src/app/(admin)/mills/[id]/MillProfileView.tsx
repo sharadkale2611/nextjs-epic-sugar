@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import KYCDocsPage from "@/app/(admin)/kyc-documents/verify/[userId]/page";
 import { Product } from "@/features/mill";
+import Button from "@/components/atoms/Button";
 
 
 /* =======================
@@ -14,14 +15,14 @@ import { Product } from "@/features/mill";
 ======================= */
 
 const Tab = ({ label, icon, active, onClick }: any) => (
-    <button
+    <Button
         onClick={onClick}
         className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition
         ${active ? "bg-blue-500 text-white shadow" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
     >
         <Icon name={icon} className="w-4 h-4" />
         {label}
-    </button>
+    </Button>
 );
 
 const Section = ({ title, icon, children }: any) => (
@@ -108,12 +109,12 @@ const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
                         </h2>
                     </div>
 
-                    <button
+                    <Button
                         onClick={() => onVerifyClick(userId)}
                         className="flex items-center gap-2 border border-green-600 text-green-600 px-4 py-2 rounded-full text-sm hover:bg-green-50"
                     >
                         Verify Documents
-                    </button>
+                    </Button>
                 </div>
 
                 <div className="overflow-hidden rounded-xl border">
@@ -158,12 +159,12 @@ const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
 
                                     <td className="px-4 py-3">
                                         {doc.documentPath ? (
-                                            <button
+                                            <Button
                                                 onClick={() => setPreviewUrl(doc.documentPath)}
                                                 className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full text-xs hover:bg-blue-50"
                                             >
                                                 View
-                                            </button>
+                                            </Button>
                                         ) : (
                                             "-"
                                         )}
@@ -195,13 +196,13 @@ const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
                                 View Document
                             </h3>
 
-                            <button
+                            <Button
                                 onClick={() => setPreviewUrl(null)}
                                 className="px-3 py-1 rounded-md border text-gray-600 
               hover:bg-gray-50 transition"
                             >
                                 ✕
-                            </button>
+                            </Button>
                         </div>
 
                         {/* image */}
@@ -284,12 +285,12 @@ const KYCTab = ({
                         </h2>
                     </div>
 
-                    <button
+                    <Button
                         onClick={onBack}
                         className="flex items-center gap-2 border border-gray-400 text-gray-700 px-4 py-2 rounded-full text-sm hover:bg-gray-50"
                     >
                         ← Back to KYC List
-                    </button>
+                    </Button>
                 </div>
 
                 {/* 👉 Your verification table lives here */}

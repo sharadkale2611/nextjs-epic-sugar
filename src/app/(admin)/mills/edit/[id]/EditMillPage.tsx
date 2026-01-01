@@ -9,6 +9,7 @@ import { useUpdateMillMutation } from "@/features/mill/millApi";
 import { useGetMillByIdQuery } from "@/features/mill/millApi"; // Import the query hook
 import { millSchema } from "@/features/mill";
 import { enqueueSnackbar } from "notistack";
+import Button from "@/components/atoms/Button";
 
 interface StateOption {
     id: number;
@@ -217,19 +218,19 @@ export default function EditMillPage() {
 
                     {/* Actions */}
                     <div className="flex justify-end gap-3 border-t pt-6">
-                        <button
+                        <Button
                             onClick={() => history.back()}
                             className="rounded-lg border px-5 py-2 text-gray-700 hover:bg-gray-100"
                         >
                             Cancel
-                        </button>
+                        </Button>
 
-                        <button
+                        <Button
                             onClick={handleSave}
                             className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
                         >
                             Save Mill
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

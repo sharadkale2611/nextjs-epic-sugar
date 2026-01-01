@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useGetProductsQuery } from "@/features/product/productApi";
 import { useRouter } from "next/navigation";
+import Button from "@/components/atoms/Button";
 
 export default function ProductListPage() {
     const { data: products = [], isLoading } = useGetProductsQuery();
@@ -59,12 +60,12 @@ export default function ProductListPage() {
                                             : "Not Available"}
                                     </p>
 
-                                    <button
+                                    <Button
                                         onClick={() => handleBuyNow(product.productId)}
                                         className="mt-4 w-full rounded-lg bg-green-500 py-2 text-white font-semibold hover:bg-green-600"
                                     >
                                         BUY NOW
-                                    </button>
+                                    </Button>
                                 </div>
                             </div>
                         );

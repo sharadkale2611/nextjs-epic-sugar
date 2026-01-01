@@ -127,20 +127,20 @@ export default function EditProductPage() {
 
                 <div className="flex gap-3">
                     {/* Back to Product List */}
-                    <button
+                    <Button
                         onClick={() => router.push("/products")}
                         className="rounded border px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                         ← Product List
-                    </button>
+                    </Button>
 
                     {/* View Product */}
-                    <button
+                    <Button
                         onClick={() => router.push(`/products/${productId}`)}
                         className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
                     >
                         View Product
-                    </button>
+                    </Button>
                 </div>
             </div>
 

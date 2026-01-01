@@ -8,6 +8,7 @@ import {
 } from "@/features/company/companyApi";
 import Icon from "@/components/atoms/Icon";
 import KYCDocsPage from "@/app/(admin)/kyc-documents/verify/[userId]/page";
+import Button from "@/components/atoms/Button";
 
 
 
@@ -18,14 +19,20 @@ import KYCDocsPage from "@/app/(admin)/kyc-documents/verify/[userId]/page";
 ======================= */
 
 const Tab = ({ label, icon, active, onClick }: any) => (
-    <button
+    <Button
         onClick={onClick}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition
-        ${active ? "bg-blue-500 text-white shadow" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+        size="sm"
+        className={`
+        flex items-center gap-2 rounded-full text-sm font-medium
+        ${active
+                ? "bg-blue-500 text-white shadow hover:bg-blue-600"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }
+      `}
     >
         <Icon name={icon} className="w-4 h-4" />
         {label}
-    </button>
+    </Button>
 );
 
 const Section = ({ title, icon, children }: any) => (

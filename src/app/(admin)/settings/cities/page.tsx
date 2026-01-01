@@ -13,6 +13,7 @@ import {
 } from "@/features/city";
 
 import CityTable from "./table";
+import Button from "@/components/atoms/Button";
 
 export default function CityListPage() {
 
@@ -49,9 +50,9 @@ export default function CityListPage() {
           desc={`Total ${totalCount} records found.`}
           action={
             <Link href="/settings/cities/create">
-              <button className="btn btn-primary text-sm">
+              <Button className="btn btn-primary text-sm">
                 + Add City
-              </button>
+              </Button>
             </Link>
           }
         >

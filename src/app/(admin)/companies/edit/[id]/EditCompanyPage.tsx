@@ -13,6 +13,7 @@ import {
 } from "@/features/company/companyApi";
 
 import { companySchema } from "@/features/company";
+import Button from "@/components/atoms/Button";
 
 /* ================================
    TYPES
@@ -207,19 +208,18 @@ export default function EditCompanyPage() {
 
                     {/* Actions */}
                     <div className="flex justify-end gap-3 border-t pt-6">
-                        <button
+                        <Button
                             onClick={() => router.back()}
                             className="rounded-lg border px-5 py-2 text-gray-700 hover:bg-gray-100"
                         >
                             Cancel
-                        </button>
-
-                        <button
+                        </Button>
+                        <Button
                             onClick={handleSave}
                             className="rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
                         >
                             Update Company
-                        </button>
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGetKycVerificationQuery, useUpdateKycDocumentMutation } from "@/features/kyc";
 import type { RootState } from "@/store";
+import Button from "@/components/atoms/Button";
 
 export default function KycUploadsPage() {
   const router = useRouter();
@@ -90,19 +91,19 @@ export default function KycUploadsPage() {
 
                 <td className="px-4 py-3">
                   {doc.documentPath ? (
-                    <button
+                    <Button
                       onClick={() => setPreviewUrl(doc.documentPath)}
                       className="text-blue-600 border border-blue-500 px-3 py-1 rounded-full text-xs hover:bg-blue-50"
                     >
                       View
-                    </button>
+                    </Button>
                   ) : (
                     "-"
                   )}
                 </td>
 
                 <td className="px-4 py-3">
-                  <button
+                  <Button
                     className="px-3 py-1 text-xs rounded bg-blue-600 text-white hover:bg-blue-700"
                     onClick={() => {
                       setSelectedDoc(doc);
@@ -113,7 +114,7 @@ export default function KycUploadsPage() {
                     }}
                   >
                     {doc.documentPath ? "Replace" : "Upload"}
-                  </button>
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -125,12 +126,12 @@ export default function KycUploadsPage() {
           <div className="fixed inset-0 z-[9999] bg-black/70 flex items-start justify-center pt-40">
 
             {/* Close Button */}
-            <button
+            <Button
               onClick={() => setPreviewUrl(null)}
               className=" top-4 right-4 z-50 bg-white/90 hover:bg-white text-black px-3 py-1 rounded-md shadow"
             >
               ✕
-            </button>
+            </Button>
 
             {/* Image Container */}
             <div className="mt-6 max-h-[400px] overflow-hidden">
@@ -177,14 +178,14 @@ export default function KycUploadsPage() {
               </div>
 
               <div className="flex justify-end gap-2 mt-6">
-                <button
+                <Button
                   onClick={() => setOpen(false)}
                   className="px-3 py-1 border rounded"
                 >
                   Cancel
-                </button>
+                </Button>
 
-                <button
+                <Button
                   disabled={isSaving}
                   onClick={async () => {
                     const form = new FormData();
@@ -200,7 +201,7 @@ export default function KycUploadsPage() {
                   className="px-3 py-1 rounded bg-green-600 text-white disabled:opacity-60"
                 >
                   {isSaving ? "Saving..." : "Save"}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

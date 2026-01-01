@@ -13,6 +13,7 @@ import {
     useUpdateSellingPriceMutation,
 } from "@/features/product/productApi";
 import { useRouter } from "next/navigation";
+import Button from "@/components/atoms/Button";
 
 type PreviewImage = {
     file: File;
@@ -116,20 +117,20 @@ export default function ProductViewPage() {
 
                 <div className="flex gap-3">
                     {/* Back to List */}
-                    <button
+                    <Button
                         onClick={() => router.push("/products")}
                         className="rounded border px-4 py-2 text-sm hover:bg-gray-100"
                     >
                         ← Product List
-                    </button>
+                    </Button>
 
                     {/* Edit Product */}
-                    <button
+                    <Button
                         onClick={() => router.push(`/products/edit/${productId}`)}
                         className="rounded bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
                     >
                         ✏️ Edit Product
-                    </button>
+                    </Button>
                 </div>
             </div>
 
@@ -153,12 +154,12 @@ export default function ProductViewPage() {
                                     {currentPrice?.sellingPrice ?? "N/A"}
                                 </span>
 
-                                <button
+                                <Button
                                     onClick={() => setIsEditingPrice(true)}
                                     className="text-blue-600 hover:text-blue-800 text-sm"
                                 >
                                     ✏️
-                                </button>
+                                </Button>
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
@@ -169,19 +170,19 @@ export default function ProductViewPage() {
                                     className="w-24 rounded border px-2 py-1 text-sm"
                                 />
 
-                                <button
+                                <Button
                                     onClick={handleSavePrice}
                                     className="rounded bg-green-600 px-2 py-1 text-white text-sm"
                                 >
                                     Save
-                                </button>
+                                </Button>
 
-                                <button
+                                <Button
                                     onClick={() => setIsEditingPrice(false)}
                                     className="text-sm text-gray-500"
                                 >
                                     Cancel
-                                </button>
+                                </Button>
                             </div>
                         )}
                     </div>
@@ -210,14 +211,14 @@ export default function ProductViewPage() {
                                         className="h-40 w-full object-cover"
                                     />
 
-                                    <button
+                                    <Button
                                         onClick={() =>
                                             handleDelete(img.productImageId)
                                         }
                                         className="absolute top-2 right-2 rounded bg-red-600 px-2 py-1 text-xs text-white"
                                     >
                                         Delete
-                                    </button>
+                                    </Button>
                                 </div>
                             ))}
                         </div>
@@ -283,13 +284,13 @@ export default function ProductViewPage() {
                                         ))}
                                     </div>
 
-                                    <button
+                                    <Button
                                         onClick={handleUpload}
                                         disabled={uploading}
                                         className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50"
                                     >
                                         {uploading ? "Uploading..." : "Upload Image"}
-                                    </button>
+                                    </Button>
                                 </>
                             )}
                         </div>
