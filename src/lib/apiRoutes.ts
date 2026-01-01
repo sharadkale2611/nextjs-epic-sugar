@@ -20,5 +20,6 @@ export const API_ROUTES = {
     KYC_UPLOADS: (id: number) => `/kyc-documents/${id}`,
     PRODUCT_IMAGES: "/product-images",
     SELLING_PRICES: "/selling-prices",
+    ORDERS: "/orders",
     // PRODUCT_DETAILS: (id: number) => `/products/${id}/details`,
 };

@@ -6,6 +6,7 @@ import {
 } from "@/features/location/locationApi";
 import { skipToken } from "@reduxjs/toolkit/query";
 import CustomSelect from "@/components/atoms/CustomSelect";
+import { useEffect } from "react";
 
 /* -------------------------------- TYPES -------------------------------- */
 
@@ -77,6 +78,10 @@ export default function LocationSelector({
 }: LocationSelectorProps) {
     const { data: states } = useGetStatesQuery();
     const { data: cities } = useGetCitiesQuery(stateId ?? skipToken);
+
+    useEffect(() => {
+        console.log("cities loaded:", cities);
+    }, [cities]);
 
     return (
         <div className="grid grid-cols-12 gap-4">

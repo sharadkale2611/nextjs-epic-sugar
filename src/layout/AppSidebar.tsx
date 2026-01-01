@@ -28,6 +28,8 @@ const navItems: NavItem[] = [
   { icon: <Icon name="BoxCubeIcon" />, name: "Products Shop", path: "/products/shop", roles: ["Company-Admin"] },
 
   { icon: <Icon name="BoxCubeIcon" />, name: "KYC Documents", path: "/kyc-documents/uploads", roles: ["Mill-Admin", "Company-Admin"] },
+  { icon: <Icon name="BoxCubeIcon" />, name: "My Order", path: "/order/invoice", roles: ["Mill-Admin", "Company-Admin"] },
+  
 
 ];
 

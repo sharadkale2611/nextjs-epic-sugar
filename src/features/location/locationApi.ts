@@ -1,5 +1,5 @@
+import { api } from "@/store/api";
 import { API_ROUTES } from "@/lib/apiRoutes";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface State {
     stateId: number;
@@ -16,7 +16,6 @@ interface City {
     isActive: boolean;
 }
 
-
 interface ApiResponse<T> {
     success: boolean;
     message: string;
@@ -25,22 +24,24 @@ interface ApiResponse<T> {
     errors: any;
 }
 
-export const locationApi = createApi({
-    reducerPath: "locationApi",
-    baseQuery: fetchBaseQuery({
-        baseUrl: process.env.NEXT_PUBLIC_API_URL,
-        credentials: "include", // important if cookies are used
-    }),
+export const locationApi = api.injectEndpoints({
     endpoints: (builder) => ({
-        getStates: builder.query<any[], void>({
+        // ======================
+        // GET STATES
+        // ======================
+        getStates: builder.query<State[], void>({
             query: () => API_ROUTES.STATES,
-            transformResponse: (response: ApiResponse<State[]>) => response.data,
-
+            transformResponse: (res: ApiResponse<State[]>) => res.data,
+            providesTags: ["State"],
         }),
 
-        getCities: builder.query<any[], number>({
-            query: (stateId) => `${API_ROUTES.CITIES}/${stateId}`,
-            transformResponse: (response: ApiResponse<City[]>) => response.data,
+        // ======================
+        // GET CITIES
+        // ======================
+        getCities: builder.query<City[], number>({
+            query: (stateId) => `${API_ROUTES.CITIES}/state/${stateId}`,
+            transformResponse: (res: ApiResponse<City[]>) => res.data,
+            providesTags: ["City"],
         }),
     }),
 });
@@ -49,5 +50,3 @@ export const {
     useGetStatesQuery,
     useGetCitiesQuery,
 } = locationApi;
-
-
