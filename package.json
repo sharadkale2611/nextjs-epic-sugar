@@ -2,12 +2,12 @@
   "name": "epic-sugar",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint ."
-  },
+"scripts": {
+  "dev": "next dev",
+  "build": "next build",
+  "start": "node server.js",
+  "lint": "eslint ."
+},
   "dependencies": {
     "@fullcalendar/core": "^6.1.19",
     "@fullcalendar/daygrid": "^6.1.19",
