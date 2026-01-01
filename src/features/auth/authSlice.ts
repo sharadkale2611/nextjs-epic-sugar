@@ -4,14 +4,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
     user: any | null;
-    accessToken: string | null;
-    refreshToken: string | null;
 }
 
 const initialState: AuthState = {
     user: null,
-    accessToken: null,
-    refreshToken: null,
 };
 
 const authSlice = createSlice({
@@ -20,13 +16,9 @@ const authSlice = createSlice({
     reducers: {
         setCredentials: (state, action: PayloadAction<any>) => {
             state.user = action.payload;
-            state.accessToken = action.payload.accessToken;
-            state.refreshToken = action.payload.refreshToken;
         },
         logoutAction: (state) => {
             state.user = null;
-            state.accessToken = null;
-            state.refreshToken = null;
         },
     },
 });

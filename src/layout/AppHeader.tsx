@@ -10,6 +10,12 @@ import Link from "next/link";
 import React, { useState ,useEffect,useRef} from "react";
 import { useSelector } from "react-redux";
 
+
+
+
+
+
+
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 

@@ -1,25 +1,21 @@
-// src/store/index.ts
-
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import authReducer from "@/features/auth/authSlice";
 import { api } from "./api";
-import { locationApi } from "@/features/location/locationApi";
 
-// 🔹 Combine reducers
+// 🔹 Root reducer
 const rootReducer = combineReducers({
     auth: authReducer,
     [api.reducerPath]: api.reducer,
-    [locationApi.reducerPath]: locationApi.reducer,
 });
 
 // 🔹 Persist config
 const persistConfig = {
     key: "root",
     storage,
-    whitelist: ["auth"], // only persist auth
+    whitelist: ["auth"], // persist only auth state
 };
 
 // 🔹 Persisted reducer
@@ -30,8 +26,8 @@ export const store = configureStore({
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
-            serializableCheck: false, // REQUIRED for redux-persist
-        }).concat(api.middleware, locationApi.middleware),
+            serializableCheck: false,
+        }).concat(api.middleware),
     devTools: process.env.NODE_ENV !== "production",
 });
 

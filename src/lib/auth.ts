@@ -1,18 +1,23 @@
 import { logoutAction } from "@/features/auth/authSlice";
 import { store, persistor } from "@/store";
-import Cookies from "js-cookie";
 
 export const logout = async () => {
-    // 1️⃣ Clear redux state
+    try {
+        // 🔹 Tell backend to clear HttpOnly cookie
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
+            method: "POST",
+            credentials: "include", // IMPORTANT
+        });
+    } catch (error) {
+        console.error("Logout API failed", error);
+    }
+
+    // 🔹 Clear redux state
     store.dispatch(logoutAction());
 
-    // 2️⃣ Clear persisted redux
+    // 🔹 Clear persisted redux store
     await persistor.purge();
 
-    // 3️⃣ Remove cookies used by middleware
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-
-    // 4️⃣ Force hard redirect
+    // 🔹 Redirect to login
     window.location.replace("/signin");
 };

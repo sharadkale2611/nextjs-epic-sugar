@@ -5,7 +5,6 @@ import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
 import React, { useEffect } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
 export default function AdminLayout({
