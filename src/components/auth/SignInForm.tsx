@@ -2,11 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Cookies from "js-cookie";
 
 import Button from "@/components/atoms/Button";
-import Checkbox from "@/components/form/input/Checkbox";
 import CustomInput from "../atoms/CustomInput";
 
 import { useLoginMutation } from "@/features/auth/authApi";
@@ -33,13 +30,6 @@ export default function SignInForm() {
       const response = await login({ username, password }).unwrap();
 
       dispatch(setCredentials(response));
-
-      // ✅ SET COOKIE FOR MIDDLEWARE
-      Cookies.set("accessToken", response.accessToken, {
-        expires: 7,
-        secure: true,
-        sameSite: "lax",
-      });
 
       router.replace("/");
     } catch (err: any) {

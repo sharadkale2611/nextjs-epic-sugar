@@ -36,7 +36,7 @@ export default function Companies() {
     }));
 
     return (
-        <RequireRole allowedRoles={[ROLES.SUPER_ADMIN, ROLES.COMPANY_ADMIN]}>
+        <RequireRole allowedRoles={[ROLES.SUPER_ADMIN]}>
 
             <PageBreadcrumb pageTitle="Manage Companies (Buyers)" />
 

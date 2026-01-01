@@ -5,6 +5,7 @@ import Icon from "@/components/atoms/Icon";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useDeleteStateMutation } from "@/features/states/stateApi";
+import { useState } from "react";
 
 type StateRow = {
     id: number;
@@ -19,12 +20,15 @@ type Props = {
 const StateTable = ({ data }: Props) => {
     const router = useRouter();
     const [deleteState, { isLoading }] = useDeleteStateMutation();
+    const [deletingId, setDeletingId] = useState<number | null>(null);
 
     const handleDelete = async (id: number) => {
         if (!window.confirm("Are you sure you want to delete this state?")) return;
 
         try {
+            setDeletingId(id);
             await deleteState(id).unwrap();
+
             enqueueSnackbar("State deleted successfully", {
                 variant: "success",
             });
@@ -32,6 +36,8 @@ const StateTable = ({ data }: Props) => {
             enqueueSnackbar("Failed to delete state", {
                 variant: "error",
             });
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -67,10 +73,7 @@ const StateTable = ({ data }: Props) => {
                                 {index + 1}
                             </td>
 
-                            <td
-                                className="px-6 py-4 cursor-pointer text-blue-600 hover:underline"
-                                onClick={() => router.push(`/settings/states/${item.id}`)}
-                            >
+                            <td className="px-6 py-4 text-gray-600">
                                 {item.stateName}
                             </td>
 
@@ -93,11 +96,11 @@ const StateTable = ({ data }: Props) => {
                                     size="xs"
                                     variant="danger"
                                     outline
-                                    disabled={isLoading}
+                                    disabled={isLoading && deletingId === item.id}
                                     startIcon={<Icon name="TrashBinIcon" className="w-5 h-5" />}
                                     onClick={() => handleDelete(item.id)}
                                 >
-                                    Delete
+                                    {deletingId === item.id ? "Deleting..." : "Delete"}
                                 </Button>
                             </td>
                         </tr>

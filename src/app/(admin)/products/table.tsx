@@ -34,7 +34,7 @@ const ProductTable = ({ data }: Props) => {
                         >
                             <td className="px-4 py-3">{index + 1}</td>
 
-                            <td className="px-4 py-3 font-medium text-link">
+                            <td className="px-4 py-3 font-medium text-link text-blue-600 hover:underline">
                                 <Link href={`/products/${item.productId}`}>
                                     {item.productName}
                                 </Link>
@@ -63,7 +63,7 @@ const ProductTable = ({ data }: Props) => {
                                 {new Date(item.createdAt).toLocaleDateString()}
                             </td>
 
-                            <td className="px-4 py-3 text-blue-600 font-medium">
+                            <td className="px-4 py-3 font-medium">
                                 {item.sellingPrice
                                     ? `₹${item.sellingPrice.toLocaleString()}`
                                     : "-"}
