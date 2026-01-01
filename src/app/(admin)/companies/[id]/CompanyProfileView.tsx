@@ -174,7 +174,7 @@ const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
                     <table className="w-full text-sm">
                         <thead className="bg-gray-50 border-b">
                             <tr className="text-left font-semibold">
-                                <th className="px-4 py-3">KYC ID</th>
+                                <th className="px-4 py-3">#</th>
                                 <th className="px-4 py-3">Document Name</th>
                                 <th className="px-4 py-3">Document Number</th>
                                 <th className="px-4 py-3">Status</th>
@@ -184,9 +184,9 @@ const KYCDocumentsTable = ({ documents, onVerifyClick }: any) => {
                         </thead>
 
                         <tbody>
-                            {documents.map((doc: any) => (
+                            {documents.map((doc: any, i: number) => (
                                 <tr key={doc.kycId} className="border-b last:border-0">
-                                    <td className="px-4 py-3">{doc.kycId}</td>
+                                    <td className="px-4 py-3">{i + 1}</td>
                                     <td className="px-4 py-3">
                                         {doc.documentType.documentTypeName}
                                     </td>
@@ -380,14 +380,14 @@ export default function CompanyProfileView({ companyId }: { companyId: number })
             {/* RIGHT CONTENT */}
             <div className="flex-1 space-y-6">
                 <div className="bg-white p-4 rounded-2xl shadow flex gap-3">
-                    <Tab label="Profile" icon="BuildingIcon" active={activeTab === "profile"} onClick={() => setActiveTab("profile")} />
-                    <Tab label="Users" icon="UsersIcon" active={activeTab === "users"} onClick={() => setActiveTab("users")} />
+                    <Tab label="Profile" icon="BoxIcon" active={activeTab === "profile"} onClick={() => setActiveTab("profile")} />
+                    <Tab label="Users" icon="UserIcon" active={activeTab === "users"} onClick={() => setActiveTab("users")} />
                     <Tab label="Documents" icon="FileIcon" active={activeTab === "documents"} onClick={() => setActiveTab("documents")} />
                 </div>
 
                 {activeTab === "profile" && (
                     <>
-                        <Section title="Company Information" icon="BuildingIcon">
+                        <Section title="Company Information" icon="BoxIcon">
                             <InfoCard label="Company Name" value={company.companyName} />
                             <InfoCard label="Company Code" value={company.companyCode} />
                             <InfoCard label="Business Type" value={company.businessType} />

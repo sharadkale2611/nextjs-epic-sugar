@@ -12,6 +12,10 @@ export default function Icon({
     size = 20,
     className = "",
 }: Props) {
+  // 👇 ADD THIS
+//   console.log("ICON NAME:", name);
+//   console.log("ICON FILE:", iconMap[name]);
+
     return (
         <Image
             src={`/icons/${iconMap[name]}.svg`}

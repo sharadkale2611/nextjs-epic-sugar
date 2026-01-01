@@ -34,7 +34,7 @@ export const iconMap = {
     LockIcon: "lock",
     EnvelopeIcon: "envelope",
     UserIcon: "user-line",
-    CalenderIcon: "calender-line",
+    CalendarIcon: "calendar-line",
     TimeIcon: "time",
     CopyIcon: "copy",
     ChevronLeftIcon: "chevron-left",
@@ -52,6 +52,7 @@ export const iconMap = {
     ChatIcon: "chat",
     MoreDotIcon: "more-dot",
     BellIcon: "bell",
+    LocationIcon: "info",
 } as const;
 
 export type IconName = keyof typeof iconMap;

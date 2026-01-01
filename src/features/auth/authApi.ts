@@ -18,6 +18,19 @@ export interface LoginResponse {
     accessTokenExpiry: string;
 }
 
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  error?: string | null;
+}
+
 export const authApi = api.injectEndpoints({
     endpoints : (builder) => ({
         login: builder.mutation<LoginResponse, LoginRequest>({
@@ -27,9 +40,22 @@ export const authApi = api.injectEndpoints({
                 body,
             })
         }),
+
+
+     changePassword: builder.mutation<void, { userId: number; body: ChangePasswordRequest }>({
+      query: ({ userId, body }) => ({
+        url: `/users/${userId}/change-password`,
+        method: "POST",
+        body,
+        credentials: "include", // ⬅️ important for cookies
+      })
+    //   invalidatesTags: ["User"], // optional
+    }),
+
+
     }),
 });
 
 
-export const  { useLoginMutation } = authApi;
+export const  { useLoginMutation,  useChangePasswordMutation } = authApi;
 
