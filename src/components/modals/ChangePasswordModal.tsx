@@ -1,6 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Button from "@/components/atoms/Button";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { useRouter } from "next/navigation";
+import { logout } from "@/lib/auth";
+import { useChangePasswordMutation } from "@/features/auth/authApi";
+
 
 type Props = {
   open: boolean;
@@ -8,7 +15,52 @@ type Props = {
 };
 
 export default function ChangePasswordModal({ open, onClose }: Props) {
+
+  const router = useRouter();
+
+
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [changePassword, { isLoading }] = useChangePasswordMutation();
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   if (!open) return null;
+
+  const handleChangePassword = async () => {
+    setError("");
+    setSuccess("");
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setError("All fields are required");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError("New password and confirm password do not match");
+      return;
+    }
+
+    try {
+      await changePassword({
+        userId: user.userId,
+        body: { currentPassword, newPassword },
+      }).unwrap();
+
+
+      setSuccess("Password changed successfully 🎉");
+
+      setTimeout(() => {
+        logout();
+        router.replace("/signin");
+      }, 1200);
+    } catch (err: any) {
+      setError(err?.data || err?.message || "Something went wrong");
+    }
+  };
+
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40">
@@ -34,6 +86,8 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
             </label>
             <input
               type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               className="mt-1 w-full rounded-md border px-3 py-2 text-sm"
             />
           </div>
@@ -44,6 +98,8 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
             </label>
             <input
               type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
               className="mt-1 w-full rounded-md border px-3 py-2 text-sm"
             />
           </div>
@@ -54,19 +110,25 @@ export default function ChangePasswordModal({ open, onClose }: Props) {
             </label>
             <input
               type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="mt-1 w-full rounded-md border px-3 py-2 text-sm"
             />
           </div>
         </div>
+
+        {error && <p className="text-sm text-red-600 px-6">{error}</p>}
+        {success && <p className="text-sm text-green-600 px-6">{success}</p>}
 
         {/* Footer */}
         <div className="flex justify-end gap-3 border-t px-6 py-4">
           <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
-          <Button variant="primary">
-            Update Password
+          <Button variant="primary" onClick={handleChangePassword} disabled={isLoading}>
+            {isLoading ? "Updating..." : "Update Password"}
           </Button>
+
         </div>
       </div>
     </div>
