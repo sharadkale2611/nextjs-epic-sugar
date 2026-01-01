@@ -52,7 +52,7 @@ export default function BuyPage() {
             const orderId = response.data.buyerPurchaseId;
 
             if (type === "pay") {
-                router.push(`/order/payments/${orderId}`);
+                router.push(`/order/payment/${orderId}`);
             } else {
                 router.push(`/order/invoice/${orderId}`);
             }

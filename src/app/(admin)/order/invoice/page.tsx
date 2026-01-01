@@ -116,18 +116,29 @@ export default function InvoicesPage() {
                                         )}
                                     </td>
                                     <td className="px-4 py-3">
-                                        {/* Actions can be added here */}
-                                        <Button
-                                            onClick={() =>
-                                                router.push(
-                                                    `/order/invoice/${invoice.buyerPurchaseId}`
-                                                )
-                                            }
-                                            className="px-3 py-1 bg-blue-600 text-white rounded"
-                                        >
-                                            View
-                                        </Button>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                size="sm"
+                                                onClick={() => router.push(`/order/invoice/${invoice.buyerPurchaseId}`)}
+                                                className="px-3 py-1 bg-blue-600 text-white rounded"
+                                            >
+                                                Invoice
+                                            </Button>
+
+                                            {invoice.orderStatus === "Paid" && (
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        router.push(`/order/payment/${invoice.buyerPurchaseId}/slip/${invoice.paymentId}`)
+                                                    }
+                                                    className="px-3 py-1 bg-green-600 text-white rounded"
+                                                >
+                                                    Pay Slip
+                                                </Button>
+                                            )}
+                                        </div>
                                     </td>
+
                                 </tr>
 
                             ))

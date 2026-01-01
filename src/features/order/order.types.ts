@@ -32,6 +32,7 @@ export interface InvoiceResponse {
     isVerified: boolean;
 
     buyerPurchaseId: number;
+    productId: number;
     productName: string;
     productGrade: string;
     quantity: number;
@@ -40,12 +41,14 @@ export interface InvoiceResponse {
     purchaseOrderNumber: string;
     purchaseOrderDate: string;
 
+    buyerId: number;
     buyerName: string;
     buyerMobile: string;
     buyerGSTNumber: string;
     buyerPANNumber: string;
     buyerFullAddress: string;
 
+    millId: number;
     millName: string;
     millGSTNumber: string;
     millPANNumber: string | null;
@@ -54,6 +57,59 @@ export interface InvoiceResponse {
     driverName: string | null;
     vehicleNumber: string | null;
 }
+
+// PAY-NOW Request (Frontend → API)
+export interface PayNowPayload {
+    productId: number;
+    millId: number;
+    orderQuantity: number;
+    totalAmount: number;
+
+    paymentMethod: string;
+    gatewayTransactionId?: string;
+    paymentDate?: string;
+}
+
+// PAY-NOW Response (Backend → Frontend)
+export interface PayNowResponse {
+    buyerPurchaseId: number;
+    paymentId: number;
+
+    paymentStatus: string;
+    paymentReference: string;
+
+    productName: string;
+}
+
+export interface PaymentDetailsResponse {
+    buyerPurchaseId: number;
+
+    // ORDER
+    productId: number;
+    productName: string;
+    quantity: number;
+    totalAmount: number;
+    orderStatus: string;
+    orderDate: string;
+
+    // DELIVERY
+    driverName: string;
+    mobileNumber: string;
+    vehicleNumber: string;
+    vehicleType: string | null;
+
+    // PAYMENT
+    paymentId: number;
+    paymentStatus: string;
+    paymentMethod: string | null;
+    paymentReference: string | null;
+    gatewayTransactionId: string | null;
+    paymentDate: string | null;
+    amountPaid: number;
+
+    isVerified: boolean;
+}
+
 
 export interface ApiResponse<T> {
     success: boolean;

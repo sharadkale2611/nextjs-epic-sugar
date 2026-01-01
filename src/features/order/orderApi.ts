@@ -6,6 +6,9 @@ import {
     OrderResponse,
     InvoiceResponse,
     ApiResponse,
+    PayNowResponse,
+    PayNowPayload,
+    PaymentDetailsResponse,
 } from "./order.types";
 import { API_ROUTES } from "@/lib/apiRoutes";
 
@@ -42,6 +45,29 @@ export const orderApi = api.injectEndpoints({
                 method: "GET",
             }),
         }),
+
+        // CREATE PAYMENT + ORDER (Pay Now)
+        payNow: builder.mutation<ApiResponse<PayNowResponse>, PayNowPayload>({
+            query: (payload) => ({
+                url: `${API_ROUTES.ORDERS}/pay-now`,
+                method: "POST",
+                body: payload,
+            }),
+        }),
+
+        // GET PAYMENT DETAILS BY ORDER ID
+        getPaymentDetails: builder.query<
+            ApiResponse<PaymentDetailsResponse>,
+            number
+        >({
+            query: (buyerPurchaseId) => ({
+                url: `${API_ROUTES.ORDERS}/payment-details/${buyerPurchaseId}`,
+                method: "GET",
+            }),
+        }),
+
+
+
     }),
 });
 
@@ -50,4 +76,7 @@ export const {
     useGetInvoiceQuery,
     useGetInvoicesByMillIdQuery,
     useGetInvoicesByBuyerIdQuery,
+    usePayNowMutation,
+    useGetPaymentDetailsQuery,
+
 } = orderApi;
