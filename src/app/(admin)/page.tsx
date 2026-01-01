@@ -34,5 +34,3 @@ export default function Ecommerce() {
     </div>
   );
 }
-
-export { }; // 👈 Ensures file is treated as a module
