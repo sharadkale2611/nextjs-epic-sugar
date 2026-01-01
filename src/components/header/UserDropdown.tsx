@@ -7,11 +7,15 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { selectAuthUser } from "@/features/auth/authSelectors";
 import { logout } from "@/lib/auth";
+
 import ChangePasswordModal from "@/components/modals/ChangePasswordModal";
+import ProfileModal from "@/components/modals/ProfileModal";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
+  const [openProfile, setOpenProfile] = useState(false);
+
   const user = useSelector(selectAuthUser);
   const router = useRouter();
 
@@ -58,13 +62,20 @@ export default function UserDropdown() {
 
           {/* MENU */}
           <ul className="mt-3 border-t pt-3">
+            {/* 🔥 PROFILE POPUP */}
             <li>
-              <DropdownItem href="/profile" onItemClick={() => setIsOpen(false)}>
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  setOpenProfile(true);
+                }}
+                className="block w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-gray-100"
+              >
                 Profile
-              </DropdownItem>
+              </button>
             </li>
 
-            {/* 🔥 CHANGE PASSWORD (POPUP OPENS HERE) */}
+            {/* 🔥 CHANGE PASSWORD POPUP */}
             <li>
               <button
                 onClick={() => {
@@ -78,7 +89,10 @@ export default function UserDropdown() {
             </li>
 
             <li>
-              <DropdownItem href="/settings" onItemClick={() => setIsOpen(false)}>
+              <DropdownItem
+                href="/settings"
+                onItemClick={() => setIsOpen(false)}
+              >
                 Settings
               </DropdownItem>
             </li>
@@ -94,7 +108,13 @@ export default function UserDropdown() {
         </Dropdown>
       </div>
 
-      {/* 🔥 MODAL */}
+      {/* 🔥 PROFILE MODAL */}
+      <ProfileModal
+        open={openProfile}
+        onClose={() => setOpenProfile(false)}
+      />
+
+      {/* 🔥 CHANGE PASSWORD MODAL */}
       <ChangePasswordModal
         open={openChangePassword}
         onClose={() => setOpenChangePassword(false)}
