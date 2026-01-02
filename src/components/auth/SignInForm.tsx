@@ -29,7 +29,9 @@ export default function SignInForm() {
    * Wait for Redux Persist to hydrate before redirecting
    */
   useEffect(() => {
+    console.log("Rehydrated:", rehydrated);
     if (!rehydrated) return; // do nothing until hydration finishes
+    console.log("Rehydrated:", rehydrated, "Userrrr:", user);
 
     if (user) {
       router.replace("/");
@@ -92,7 +94,7 @@ export default function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-        <p>version 1.0.0</p>
+        <p>version 1.0.1</p>
       </div>
     </div>
   );
