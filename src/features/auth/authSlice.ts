@@ -1,13 +1,13 @@
-// src/features/auth/authSlice.ts
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
     user: any | null;
+    rehydrated: boolean;
 }
 
 const initialState: AuthState = {
     user: null,
+    rehydrated: false,
 };
 
 const authSlice = createSlice({
@@ -20,8 +20,13 @@ const authSlice = createSlice({
         logoutAction: (state) => {
             state.user = null;
         },
+        setRehydrated: (state, action: PayloadAction<boolean>) => {
+            state.rehydrated = action.payload;
+        },
     },
 });
 
-export const { setCredentials, logoutAction } = authSlice.actions;
+export const { setCredentials, logoutAction, setRehydrated } =
+    authSlice.actions;
+
 export default authSlice.reducer;

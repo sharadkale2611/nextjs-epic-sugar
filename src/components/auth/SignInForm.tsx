@@ -1,19 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/atoms/Button";
 import CustomInput from "../atoms/CustomInput";
+import Icon from "../atoms/Icon";
 
 import { useLoginMutation } from "@/features/auth/authApi";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setCredentials } from "@/features/auth/authSlice";
-import Icon from "../atoms/Icon";
 
 export default function SignInForm() {
   const router = useRouter();
   const dispatch = useAppDispatch();
+
+  const user = useAppSelector((s) => s.auth.user);
+  const rehydrated = useAppSelector((s) => s.auth.rehydrated);
 
   const [login, { isLoading }] = useLoginMutation();
 
@@ -22,6 +25,16 @@ export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
+  /**
+   * Wait for Redux Persist to hydrate before redirecting
+   */
+  useEffect(() => {
+    if (!rehydrated) return; // do nothing until hydration finishes
+
+    if (user) {
+      router.replace("/");
+    }
+  }, [rehydrated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,14 +42,15 @@ export default function SignInForm() {
     try {
       const response = await login({ username, password }).unwrap();
 
+      // Save user into redux + persist
       dispatch(setCredentials(response));
 
+      // Redirect immediately — hydration already complete
       router.replace("/");
     } catch (err: any) {
       setError(err?.data?.message || "Invalid username or password");
     }
   };
-
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
@@ -59,11 +73,16 @@ export default function SignInForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+
             <span
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-[42px] cursor-pointer"
             >
-              {showPassword ? <Icon name="EyeIcon" /> : <Icon name="EyeCloseIcon" />}
+              {showPassword ? (
+                <Icon name="EyeIcon" />
+              ) : (
+                <Icon name="EyeCloseIcon" />
+              )}
             </span>
           </div>
 
