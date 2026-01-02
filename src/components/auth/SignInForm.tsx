@@ -47,7 +47,9 @@ export default function SignInForm() {
     // Ensure browser is fully hydrated
     const id = setTimeout(() => {
       console.log("Hydration settled → redirecting...");
-      router.replace("/");
+      // router.replace("/");
+      window.location.replace("/");
+
     }, 150);
 
     return () => clearTimeout(id);
@@ -109,7 +111,7 @@ export default function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-        <p>version 1.0.3</p>
+        <p>version 1.0.4</p>
       </div>
     </div>
   );
