@@ -111,7 +111,7 @@ export default function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-        <p>version 1.0.4</p>
+        <p>version 1.0.5</p>
       </div>
     </div>
   );

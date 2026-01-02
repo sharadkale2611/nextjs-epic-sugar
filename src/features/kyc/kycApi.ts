@@ -32,7 +32,7 @@ export const kycApi = api.injectEndpoints({
     >({
       query: ({ kycId, status, remarks }) => ({
         url: `${API_ROUTES.KYC_UPDATE}/${kycId}`,
-        method: "PATCH",
+        method: "PUT",
         body: { status, remarks },
       }),
       invalidatesTags: ["KYC"],
