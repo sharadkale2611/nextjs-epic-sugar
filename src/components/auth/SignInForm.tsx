@@ -34,7 +34,9 @@ export default function SignInForm() {
     console.log("Rehydrated:", rehydrated, "Userrrr:", user);
 
     if (user) {
+      console.log("Before redirect");
       router.replace("/");
+      console.log("After redirect");
     }
   }, [rehydrated, user, router]);
 
@@ -94,7 +96,7 @@ export default function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-        <p>version 1.0.1</p>
+        <p>version 1.0.2</p>
       </div>
     </div>
   );
