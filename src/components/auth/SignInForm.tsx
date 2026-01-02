@@ -28,16 +28,29 @@ export default function SignInForm() {
   /**
    * Wait for Redux Persist to hydrate before redirecting
    */
-  useEffect(() => {
-    console.log("Rehydrated:", rehydrated);
-    if (!rehydrated) return; // do nothing until hydration finishes
-    console.log("Rehydrated:", rehydrated, "Userrrr:", user);
+  // useEffect(() => {
+  //   console.log("Rehydrated:", rehydrated);
+  //   if (!rehydrated) return; // do nothing until hydration finishes
+  //   console.log("Rehydrated:", rehydrated, "Userrrr:", user);
 
-    if (user) {
-      console.log("Before redirect");
+  //   if (user) {
+  //     console.log("Before redirect");
+  //     router.replace("/");
+  //     console.log("After redirect");
+  //   }
+  // }, [rehydrated, user, router]);
+
+  useEffect(() => {
+    if (!rehydrated) return;
+    if (!user) return;
+
+    // Ensure browser is fully hydrated
+    const id = setTimeout(() => {
+      console.log("Hydration settled → redirecting...");
       router.replace("/");
-      console.log("After redirect");
-    }
+    }, 150);
+
+    return () => clearTimeout(id);
   }, [rehydrated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -96,7 +109,7 @@ export default function SignInForm() {
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>
-        <p>version 1.0.2</p>
+        <p>version 1.0.3</p>
       </div>
     </div>
   );
