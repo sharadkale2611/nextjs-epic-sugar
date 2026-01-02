@@ -55,7 +55,7 @@ export default function SignInForm() {
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
-        <h1 className="text-xl font-semibold mb-4">Sign In</h1>
+        <h1 className="text-xl font-semibold mb-4">Epic Sugar - Sign In</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <CustomInput
