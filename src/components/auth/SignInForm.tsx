@@ -63,7 +63,7 @@ export default function SignInForm() {
       dispatch(setCredentials(response));
 
       // Redirect immediately — hydration already complete
-      router.replace("/");
+      // router.replace("/");
     } catch (err: any) {
       setError(err?.data?.message || "Invalid username or password");
     }
